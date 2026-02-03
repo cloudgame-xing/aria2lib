@@ -36,6 +36,8 @@ jobs:
             mingw-w64-x86_64-c-ares
 
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Verify installation
         shell: msys2 {0}
@@ -44,4 +46,7 @@ jobs:
           tree -L 3
           echo "list packages"
           pacman -Q
+          env
+          uname -a
+          pwd
 
