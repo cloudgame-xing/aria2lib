@@ -10,14 +10,41 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
+
+    defaults:
+      run:
+        shell: msys2 {0}
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Set up MSYS2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: >-
+            make
+            base-devel
+            pkgconf
+            tree
+            autoconf
+            automake
+            autotools
+            gettext-devel
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-zlib
+            mingw-w64-x86_64-libssh2
+            mingw-w64-x86_64-c-ares
 
-      - name: Run a multi-line script
+      - uses: actions/checkout@v4
+
+      - name: Verify installation
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          gcc -v
+          tree -L 3
+          echo "list packages"
+          pacman -Q
+
