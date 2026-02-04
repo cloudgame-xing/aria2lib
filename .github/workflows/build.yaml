@@ -59,11 +59,14 @@ jobs:
           pushd aria2
           file aria2/deps/wslay/configure.ac
           autoreconf -i
-          ./configure --prefix="$PWD/out" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
+          ./configure --prefix="$OUT_DIR" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
           make -j
           make install
-          tree "$OUT_DIR"
           popd
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
+          pwd
           tar -czvf aria2-windows-mingw64.tar.gz out
 
       - name: Upload Artifact
