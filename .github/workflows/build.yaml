@@ -84,10 +84,10 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${ARTIFACT_NAME}
+          name: ${{ env.ARTIFACT_NAME }}
           path: |
-            aria2-${ARTIFACT_NAME}.tar.gz
-            aria2_c_api-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+            aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -96,8 +96,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-${ARTIFACT_NAME}.tar.gz
-            aria2_c_api-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+            aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
           fail_on_unmatched_files: true
 
 
@@ -127,9 +127,9 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${ARTIFACT_NAME}
+          name: ${{ env.ARTIFACT_NAME }}
           path: |
-            aria2-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -138,7 +138,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
           fail_on_unmatched_files: true
 
   build-macos-arm64:
@@ -166,9 +166,9 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${ARTIFACT_NAME}
+          name: ${{ env.ARTIFACT_NAME }}
           path: |
-            aria2-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -177,5 +177,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-${ARTIFACT_NAME}.tar.gz
+            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
           fail_on_unmatched_files: true
