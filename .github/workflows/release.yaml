@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/_build-common.yml
+    uses: ./.github/workflows/_build-common.yaml
 
   publish:
     needs: build
