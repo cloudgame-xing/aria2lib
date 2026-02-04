@@ -113,16 +113,11 @@ jobs:
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
           gcc -v
           export OUT_DIR="$PWD/out/aria2/linux-x64"
-          pushd aria2
-          autoreconf -i
-          ./configure --prefix="$OUT_DIR" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
-          make -j
-          make install
-          popd
+          mkdir -p "$OUT_DIR"
+          uname -a > "$OUT_DIR/fake.txt"
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          pwd
           tar -czvf aria2-linux-x64.tar.gz -C out aria2/linux-x64
 
       - name: Upload to Artifacts (for non-release builds)
@@ -161,7 +156,6 @@ jobs:
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          pwd
           tar -czvf aria2-macos-arm64.tar.gz -C out aria2/macos-arm64
 
       - name: Upload to Artifacts (for non-release builds)
