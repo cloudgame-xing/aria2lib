@@ -64,14 +64,13 @@ jobs:
           make -j
           make install
           popd
-          echo "output directory structure"
-          tree "$OUT_DIR"
           echo "packaging artifact"
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" win-x64
 
       - name: Compile aria2_c_api
         shell: msys2 {0}
         run: |
+          export OUT_DIR="$PWD/out"
           cmake --preset debug
           cmake --build --preset debug
           cmake --install build/Debug
