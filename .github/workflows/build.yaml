@@ -70,7 +70,7 @@ jobs:
           cmake --install build/Debug
           cmake --preset release
           cmake --build --preset release
-          cmake --install --strip build/Release
+          cmake --install build/Release --strip
           tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
 
 
