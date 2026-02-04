@@ -123,6 +123,7 @@ jobs:
         shell: bash {0}
         run: |
           export OUT_DIR="$PWD/out/aria2/linux-x64"
+          mkdir -p "$OUT_DIR"
           uname -a > "$OUT_DIR/fake.txt"
           gcc -v >> "$OUT_DIR/fake.txt"
           echo "output directory structure"
@@ -161,8 +162,9 @@ jobs:
         shell: bash {0}
         run: |
           export OUT_DIR="$PWD/out/aria2/macos-arm64"
+          mkdir -p "$OUT_DIR"
           uname -a > "$OUT_DIR/fake.txt"
-          gcc -v >> "$OUT_DIR/fake.txt"
+          clang -v >> "$OUT_DIR/fake.txt"
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
@@ -186,4 +188,3 @@ jobs:
           files: |
             aria2-macos-arm64.tar.gz
           fail_on_unmatched_files: true
-          
