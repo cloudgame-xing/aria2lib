@@ -61,6 +61,7 @@ jobs:
           tree "$OUT_DIR"
           echo "packaging artifact"
           pwd
+          tar -czvf aria2-windows-x64.tar.gz -C out aria2/win-x64
 
       - name: Compile aria2_c_api
         shell: msys2 {0}
@@ -71,20 +72,32 @@ jobs:
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
-          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
+          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib/win-x64
 
-      - name: Upload Artifact
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: aria2_c_api-windows-x64
+      #     path: aria2_c_api-windows-x64.tar.gz
+
+      # 场景 A：日常构建 → 上传到 Artifacts（Actions 页面下载）
+      - name: Upload to Artifacts (for non-release builds)
+        if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: aria2_c_api-windows-x64
-          path: aria2_c_api-windows-x64.tar.gz
+          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          path: |
+            aria2-windows-x64.tar.gz
+            aria2_c_api-windows-x64.tar.gz
+          retention-days: 30  # 保留 30 天
+          if-no-files-found: error
 
-      - uses: xresloader/upload-to-github-release@v1
-        if: contains(github.ref, 'tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 场景 B：Release → 上传到 Release Assets（Release 页面下载）
+      - name: Upload to Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
         with:
-          file: aria2_c_api-windows-x64.tar.gz
-          overwrite: true
-          tags: true
-          draft: false
+          files: |
+            aria2-windows-x64.tar.gz
+            aria2_c_api-windows-x64.tar.gz
+          fail_on_unmatched_files: true
