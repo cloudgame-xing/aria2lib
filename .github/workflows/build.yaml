@@ -77,6 +77,18 @@ jobs:
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
+          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
+
+
+      - name: Compile aria2_c_api
+        shell: msys2 {0}
+        run: |
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install build/Release --strip
           tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib/win-x64
 
       # - name: Upload Artifact
@@ -106,3 +118,5 @@ jobs:
             aria2-windows-x64.tar.gz
             aria2_c_api-windows-x64.tar.gz
           fail_on_unmatched_files: true
+          name: aria2_c_api-windows-x64
+          path: aria2_c_api-windows-x64.tar.gz
