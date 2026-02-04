@@ -61,10 +61,21 @@ jobs:
           tree "$OUT_DIR"
           echo "packaging artifact"
           pwd
-          tar -czvf aria2-windows-x64.tar.gz -C "$OUT_DIR" aria2/win-x64
+
+      - name: Compile aria2_c_api
+        shell: msys2 {0}
+        run: |
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install --strip build/Release
+          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
+
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aria2-windows-x64
-          path: aria2-windows-x64.tar.gz
+          name: aria2_c_api-windows-x64
+          path: aria2_c_api-windows-x64.tar.gz

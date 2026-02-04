@@ -26,3 +26,11 @@ if(MINGW)
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 endif()
+
+install(TARGETS aria2_c_api
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)
+
+install(FILES src/aria2_c_api.h DESTINATION include)
