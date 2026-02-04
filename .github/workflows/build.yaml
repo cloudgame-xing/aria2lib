@@ -54,6 +54,7 @@ jobs:
       - name: Compile aria2
         shell: msys2 {0}
         run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
           gcc -v
           export OUT_DIR="$PWD/out/aria2/win-x64"
           pushd aria2
@@ -94,7 +95,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: win-x64-${{ github.ref_name }}-${{ github.sha }}
+          name: win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
             aria2-windows-x64.tar.gz
             aria2_c_api-windows-x64.tar.gz
@@ -122,6 +123,7 @@ jobs:
       - name: Compile aria2
         shell: bash {0}
         run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
           export OUT_DIR="$PWD/out/aria2/linux-x64"
           mkdir -p "$OUT_DIR"
           uname -a > "$OUT_DIR/fake.txt"
@@ -136,7 +138,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-${{ github.ref_name }}-${{ github.sha }}
+          name: linux-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
             aria2-linux-x64.tar.gz
           retention-days: 30
@@ -161,6 +163,7 @@ jobs:
       - name: Compile aria2
         shell: bash {0}
         run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
           export OUT_DIR="$PWD/out/aria2/macos-arm64"
           mkdir -p "$OUT_DIR"
           uname -a > "$OUT_DIR/fake.txt"
@@ -175,7 +178,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: macos-arm64-${{ github.ref_name }}-${{ github.sha }}
+          name: macos-arm64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
             aria2-macos-arm64.tar.gz
           retention-days: 30
