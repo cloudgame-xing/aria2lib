@@ -66,8 +66,7 @@ jobs:
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          pwd
-          tar -czvf aria2-windows-x64.tar.gz -C out aria2/win-x64
+          tar -czvf aria2-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz -C out aria2/win-x64
 
       - name: Compile aria2_c_api
         shell: msys2 {0}
@@ -78,18 +77,7 @@ jobs:
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
-          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
-
-      - name: Compile aria2_c_api
-        shell: msys2 {0}
-        run: |
-          cmake --preset debug
-          cmake --build --preset debug
-          cmake --install build/Debug
-          cmake --preset release
-          cmake --build --preset release
-          cmake --install build/Release --strip
-          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib/win-x64
+          tar -czvf aria2_c_api-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz -C out aria2lib/win-x64
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
@@ -97,8 +85,8 @@ jobs:
         with:
           name: win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
-            aria2-windows-x64.tar.gz
-            aria2_c_api-windows-x64.tar.gz
+            aria2-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
+            aria2_c_api-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -107,8 +95,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-windows-x64.tar.gz
-            aria2_c_api-windows-x64.tar.gz
+            aria2-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
+            aria2_c_api-win-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           fail_on_unmatched_files: true
 
 
@@ -121,13 +109,16 @@ jobs:
           submodules: recursive
 
       - name: Compile aria2
-        shell: bash {0}
         run: |
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          gcc -v
           export OUT_DIR="$PWD/out/aria2/linux-x64"
-          mkdir -p "$OUT_DIR"
-          uname -a > "$OUT_DIR/fake.txt"
-          gcc -v >> "$OUT_DIR/fake.txt"
+          pushd aria2
+          autoreconf -i
+          ./configure --prefix="$OUT_DIR" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
+          make -j
+          make install
+          popd
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
@@ -140,7 +131,7 @@ jobs:
         with:
           name: linux-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
-            aria2-linux-x64.tar.gz
+            aria2-linux-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -149,7 +140,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-linux-x64.tar.gz
+            aria2-linux-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           fail_on_unmatched_files: true
 
   build-macos-arm64:
@@ -161,7 +152,6 @@ jobs:
           submodules: recursive
 
       - name: Compile aria2
-        shell: bash {0}
         run: |
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
           export OUT_DIR="$PWD/out/aria2/macos-arm64"
@@ -180,7 +170,7 @@ jobs:
         with:
           name: macos-arm64-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: |
-            aria2-macos-arm64.tar.gz
+            aria2-macos-arm64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -189,5 +179,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            aria2-macos-arm64.tar.gz
+            aria2-macos-arm64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz
           fail_on_unmatched_files: true
