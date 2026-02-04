@@ -118,7 +118,7 @@ jobs:
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          tar -czvf aria2-linux-x64.tar.gz -C out aria2/linux-x64
+          tar -czvf aria2-linux-x64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz -C out aria2/linux-x64
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
@@ -156,7 +156,7 @@ jobs:
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          tar -czvf aria2-macos-arm64.tar.gz -C out aria2/macos-arm64
+          tar -czvf aria2-macos-arm64-${{ github.ref_name }}-${{ env.SHORT_SHA }}.tar.gz -C out aria2/macos-arm64
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
