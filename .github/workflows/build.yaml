@@ -157,8 +157,6 @@ jobs:
           mkdir -p "$OUT_DIR/aria2/macos-arm64"
           uname -a > "$OUT_DIR/aria2/macos-arm64/fake.txt"
           clang -v >> "$OUT_DIR/aria2/macos-arm64/fake.txt"
-          echo "output directory structure"
-          tree "$OUT_DIR"
           echo "packaging artifact"
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" macos-arm64
 
