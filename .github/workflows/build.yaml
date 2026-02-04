@@ -1,13 +1,18 @@
-name: CI
+name: build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "**" ]
+  release:
+    types: [published]
 
   workflow_dispatch:
 
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: windows-2025
@@ -61,6 +66,7 @@ jobs:
           tree "$OUT_DIR"
           echo "packaging artifact"
           pwd
+          tar -czvf aria2-windows-x64.tar.gz -C out aria2/win-x64
 
       - name: Compile aria2_c_api
         shell: msys2 {0}
@@ -74,8 +80,43 @@ jobs:
           tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
 
 
-      - name: Upload Artifact
+      - name: Compile aria2_c_api
+        shell: msys2 {0}
+        run: |
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install build/Release --strip
+          tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib/win-x64
+
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: aria2_c_api-windows-x64
+      #     path: aria2_c_api-windows-x64.tar.gz
+
+      # 场景 A：日常构建 → 上传到 Artifacts（Actions 页面下载）
+      - name: Upload to Artifacts (for non-release builds)
+        if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
+          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          path: |
+            aria2-windows-x64.tar.gz
+            aria2_c_api-windows-x64.tar.gz
+          retention-days: 30  # 保留 30 天
+          if-no-files-found: error
+
+      # 场景 B：Release → 上传到 Release Assets（Release 页面下载）
+      - name: Upload to Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            aria2-windows-x64.tar.gz
+            aria2_c_api-windows-x64.tar.gz
+          fail_on_unmatched_files: true
           name: aria2_c_api-windows-x64
           path: aria2_c_api-windows-x64.tar.gz
