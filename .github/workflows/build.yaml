@@ -94,7 +94,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          name: win-x64-${{ github.ref_name }}-${{ github.sha }}
           path: |
             aria2-windows-x64.tar.gz
             aria2_c_api-windows-x64.tar.gz
@@ -136,7 +136,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          name: linux-x64-${{ github.ref_name }}-${{ github.sha }}
           path: |
             aria2-linux-x64.tar.gz
           retention-days: 30
@@ -175,7 +175,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          name: macos-arm64-${{ github.ref_name }}-${{ github.sha }}
           path: |
             aria2-macos-arm64.tar.gz
           retention-days: 30
