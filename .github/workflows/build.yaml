@@ -14,7 +14,7 @@ permissions:
   contents: write
   
 jobs:
-  build:
+  build-win-x64:
     runs-on: windows-2025
 
     steps:
@@ -79,7 +79,6 @@ jobs:
           cmake --install build/Release --strip
           tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib
 
-
       - name: Compile aria2_c_api
         shell: msys2 {0}
         run: |
@@ -91,13 +90,6 @@ jobs:
           cmake --install build/Release --strip
           tar -czvf aria2_c_api-windows-x64.tar.gz -C out aria2lib/win-x64
 
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: aria2_c_api-windows-x64
-      #     path: aria2_c_api-windows-x64.tar.gz
-
-      # 场景 A：日常构建 → 上传到 Artifacts（Actions 页面下载）
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
@@ -106,10 +98,9 @@ jobs:
           path: |
             aria2-windows-x64.tar.gz
             aria2_c_api-windows-x64.tar.gz
-          retention-days: 30  # 保留 30 天
+          retention-days: 30
           if-no-files-found: error
 
-      # 场景 B：Release → 上传到 Release Assets（Release 页面下载）
       - name: Upload to Release Assets
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
@@ -118,5 +109,81 @@ jobs:
             aria2-windows-x64.tar.gz
             aria2_c_api-windows-x64.tar.gz
           fail_on_unmatched_files: true
-          name: aria2_c_api-windows-x64
-          path: aria2_c_api-windows-x64.tar.gz
+
+
+  build-linux-x64:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile aria2
+        shell: bash {0}
+        run: |
+          export OUT_DIR="$PWD/out/aria2/linux-x64"
+          uname -a > "$OUT_DIR/fake.txt"
+          gcc -v >> "$OUT_DIR/fake.txt"
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
+          pwd
+          tar -czvf aria2-linux-x64.tar.gz -C out aria2/linux-x64
+
+      - name: Upload to Artifacts (for non-release builds)
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          path: |
+            aria2-linux-x64.tar.gz
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload to Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            aria2-linux-x64.tar.gz
+          fail_on_unmatched_files: true
+
+  build-macos-arm64:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile aria2
+        shell: bash {0}
+        run: |
+          export OUT_DIR="$PWD/out/aria2/macos-arm64"
+          uname -a > "$OUT_DIR/fake.txt"
+          gcc -v >> "$OUT_DIR/fake.txt"
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
+          pwd
+          tar -czvf aria2-macos-arm64.tar.gz -C out aria2/macos-arm64
+
+      - name: Upload to Artifacts (for non-release builds)
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-${{ steps.version.outputs.VERSION }}
+          path: |
+            aria2-macos-arm64.tar.gz
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload to Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            aria2-macos-arm64.tar.gz
+          fail_on_unmatched_files: true
+          
