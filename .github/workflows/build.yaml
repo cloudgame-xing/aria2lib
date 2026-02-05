@@ -131,10 +131,12 @@ jobs:
           export OUT_DIR="$PWD/out"
           echo 'CC=gcc-12' >> $GITHUB_ENV
           echo 'CXX=g++-12' >> $GITHUB_ENV
+          pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl
-          make -j
-          make install
+            ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl
+            make -j
+            make install
+          popd
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
