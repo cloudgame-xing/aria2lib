@@ -177,39 +177,39 @@ jobs:
             aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
           fail_on_unmatched_files: true
 
-  build-macos-arm64:
-    runs-on: macos-14
+  # build-macos-arm64:
+  #   runs-on: macos-14
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         submodules: recursive
 
-      - name: Compile aria2
-        run: |
-          export OUT_DIR="$PWD/out"
-          export ARTIFACT_NAME="macos-arm64-${{ github.ref_name }}-${GITHUB_SHA::7}"
-          echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
-          mkdir -p "$OUT_DIR/aria2/macos-arm64"
-          uname -a > "$OUT_DIR/aria2/macos-arm64/fake.txt"
-          clang -v >> "$OUT_DIR/aria2/macos-arm64/fake.txt"
-          echo "packaging artifact"
-          tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" macos-arm64
+  #     - name: Compile aria2
+  #       run: |
+  #         export OUT_DIR="$PWD/out"
+  #         export ARTIFACT_NAME="macos-arm64-${{ github.ref_name }}-${GITHUB_SHA::7}"
+  #         echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
+  #         mkdir -p "$OUT_DIR/aria2/macos-arm64"
+  #         uname -a > "$OUT_DIR/aria2/macos-arm64/fake.txt"
+  #         clang -v >> "$OUT_DIR/aria2/macos-arm64/fake.txt"
+  #         echo "packaging artifact"
+  #         tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" macos-arm64
 
-      - name: Upload to Artifacts (for non-release builds)
-        if: github.event_name != 'release'
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: |
-            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
-          retention-days: 30
-          if-no-files-found: error
+  #     - name: Upload to Artifacts (for non-release builds)
+  #       if: github.event_name != 'release'
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: ${{ env.ARTIFACT_NAME }}
+  #         path: |
+  #           aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+  #         retention-days: 30
+  #         if-no-files-found: error
 
-      - name: Upload to Release Assets
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            aria2-${{ env.ARTIFACT_NAME }}.tar.gz
-          fail_on_unmatched_files: true
+  #     - name: Upload to Release Assets
+  #       if: github.event_name == 'release'
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: |
+  #           aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+  #         fail_on_unmatched_files: true
