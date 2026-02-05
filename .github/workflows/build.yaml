@@ -126,13 +126,14 @@ jobs:
           zlib1g-dev \
           libsqlite3-dev \
           libssh2-1-dev \
+          libexpat1-dev \
           libcppunit-dev
           export OUT_DIR="$PWD/out"
           echo 'CC=gcc-12' >> $GITHUB_ENV
           echo 'CXX=g++-12' >> $GITHUB_ENV
           pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl --enable-libaria2 ARIA2_STATIC=yes
+          ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl --without-libxml2 --with-libexpat --enable-libaria2 ARIA2_STATIC=yes
           make -j"$(nproc 2> /dev/null || sysctl -n hw.ncpu)"
           make install
           popd
