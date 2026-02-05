@@ -231,8 +231,6 @@ jobs:
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
-          echo "output directory structure"
-          tree "$OUT_DIR"
           echo "packaging artifact"
           tar -czvf aria2_c_api-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
 
