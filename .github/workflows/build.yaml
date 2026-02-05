@@ -173,6 +173,7 @@ jobs:
         with:
           files: |
             aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+            aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
           fail_on_unmatched_files: true
 
   build-macos-arm64:
