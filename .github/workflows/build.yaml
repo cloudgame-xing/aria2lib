@@ -214,12 +214,27 @@ jobs:
           export CXX=clang++
           pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2" --without-openssl --without-gnutls --with-appletls --disable-nls --enable-libaria2 --enable-static --disable-shared ARIA2_STATIC=yes
+          ./configure --prefix="$OUT_DIR/aria2" --without-openssl --without-gnutls --with-appletls --disable-nls --enable-libaria2
           make -j"$(nproc 2> /dev/null || sysctl -n hw.ncpu)"
           make install
           popd
           echo "packaging artifact"
           tar -czvf aria2-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
+      
+      - name: Compile aria2_c_api
+        run: |
+          export OUT_DIR="$PWD/out"
+          echo "OUT_DIR=${OUT_DIR}"
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install build/Release --strip
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
+          tar -czvf aria2_c_api-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
@@ -228,6 +243,7 @@ jobs:
           name: macos-arm64-${{ needs.setup.outputs.version_name }}-${{ github.run_number }}
           path: |
             aria2-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -237,4 +253,5 @@ jobs:
         with:
           files: |
             aria2-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-macos-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
           fail_on_unmatched_files: true
