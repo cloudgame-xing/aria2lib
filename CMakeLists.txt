@@ -55,3 +55,7 @@ install(TARGETS aria2_c_api
 )
 
 install(FILES src/aria2_c_api.h DESTINATION include)
+
+install(TARGETS aria2_c_api_main
+  RUNTIME DESTINATION bin
+)
