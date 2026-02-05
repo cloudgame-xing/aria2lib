@@ -142,7 +142,6 @@ jobs:
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" linux-x64
 
       - name: Compile aria2_c_api
-        shell: msys2 {0}
         run: |
           export OUT_DIR="$PWD/out"
           cmake --preset debug
