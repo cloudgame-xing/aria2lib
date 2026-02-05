@@ -112,15 +112,33 @@ jobs:
         run: |
           export ARTIFACT_NAME="linux-x64-${{ github.ref_name }}-${GITHUB_SHA::7}"
           echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
+          sudo apt update
+          sudo apt install -y \
+          g++-12 \
+          autoconf \
+          automake \
+          autotools-dev \
+          autopoint \
+          libtool \
+          pkg-config \
+          libssl-dev \
+          libc-ares-dev \
+          zlib1g-dev \
+          libsqlite3-dev \
+          libssh2-1-dev \
+          libcppunit-dev
           gcc -v
           export OUT_DIR="$PWD/out"
-          mkdir -p "$OUT_DIR/aria2/linux-x64"
-          uname -a > "$OUT_DIR/aria2/linux-x64/fake.txt"
+          echo 'CC=gcc-12' >> $GITHUB_ENV
+          echo 'CXX=g++-12' >> $GITHUB_ENV
+          autoreconf -i
+          ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl
+          make -j
+          make install
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" linux-x64
-          ls -laF
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
