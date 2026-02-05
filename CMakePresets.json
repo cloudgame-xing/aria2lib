@@ -8,7 +8,7 @@
       "binaryDir": "${sourceDir}/build/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/win-x64/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release"
       }
     },
     {
@@ -18,7 +18,7 @@
       "binaryDir": "${sourceDir}/build/Debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/win-x64/Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     }
