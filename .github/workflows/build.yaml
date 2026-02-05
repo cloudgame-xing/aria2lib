@@ -92,7 +92,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}
           path: |
             aria2-${{ env.ARTIFACT_NAME }}.tar.gz
             aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
@@ -178,7 +178,7 @@ jobs:
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}
           path: |
             aria2-${{ env.ARTIFACT_NAME }}.tar.gz
             aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
