@@ -25,6 +25,9 @@ target_link_libraries(aria2_c_api_main PRIVATE aria2_c_api)
 if(MINGW)
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
+elseif(LINUX)
+  target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
+  target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 endif()
 
 install(TARGETS aria2_c_api

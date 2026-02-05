@@ -141,6 +141,18 @@ jobs:
           echo "packaging artifact"
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" linux-x64
 
+      - name: Compile aria2_c_api
+        shell: msys2 {0}
+        run: |
+          export OUT_DIR="$PWD/out"
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install build/Release --strip
+          tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2lib" linux-x64
+
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
         uses: actions/upload-artifact@v4
