@@ -1,0 +1,6 @@
+VERS_0.1 {
+    global:
+        aria2_*;
+    local:
+        *;
+};
