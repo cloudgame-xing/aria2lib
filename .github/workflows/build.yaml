@@ -145,12 +145,16 @@ jobs:
       - name: Compile aria2_c_api
         run: |
           export OUT_DIR="$PWD/out"
+          echo "OUT_DIR=${OUT_DIR}"
           cmake --preset debug
           cmake --build --preset debug
           cmake --install build/Debug
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
           tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2lib" linux-x64
 
       - name: Upload to Artifacts (for non-release builds)
