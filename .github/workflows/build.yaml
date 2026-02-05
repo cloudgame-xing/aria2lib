@@ -60,12 +60,12 @@ jobs:
           export OUT_DIR="$PWD/out"
           pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2/win-x64" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
+          ./configure --prefix="$OUT_DIR/aria2" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
           make -j
           make install
           popd
           echo "packaging artifact"
-          tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" win-x64
+          tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR" aria2
 
       - name: Compile aria2_c_api
         shell: msys2 {0}
@@ -77,7 +77,7 @@ jobs:
           cmake --preset release
           cmake --build --preset release
           cmake --install build/Release --strip
-          tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2lib" win-x64
+          tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR" aria2lib
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
@@ -133,14 +133,14 @@ jobs:
           echo 'CXX=g++-12' >> $GITHUB_ENV
           pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl --without-libxml2 --with-libexpat --enable-libaria2 ARIA2_STATIC=yes
+          ./configure --prefix="$OUT_DIR/aria2" --without-gnutls --with-openssl --without-libxml2 --with-libexpat --enable-libaria2 ARIA2_STATIC=yes
           make -j"$(nproc 2> /dev/null || sysctl -n hw.ncpu)"
           make install
           popd
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" linux-x64
+          tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR" aria2
 
       - name: Compile aria2_c_api
         run: |
@@ -155,7 +155,7 @@ jobs:
           echo "output directory structure"
           tree "$OUT_DIR"
           echo "packaging artifact"
-          tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2lib" linux-x64
+          tar -czvf aria2_c_api-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR" aria2lib
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
