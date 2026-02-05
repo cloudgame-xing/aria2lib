@@ -127,20 +127,27 @@ jobs:
           libsqlite3-dev \
           libssh2-1-dev \
           libcppunit-dev
-          gcc -v
+          echo "1--------------------------------------------------------------------------------"
           export OUT_DIR="$PWD/out"
           echo 'CC=gcc-12' >> $GITHUB_ENV
           echo 'CXX=g++-12' >> $GITHUB_ENV
           pushd aria2
+          echo "2--------------------------------------------------------------------------------"
           autoreconf -i
+          echo "3--------------------------------------------------------------------------------"
           ./configure --prefix="$OUT_DIR/aria2/linux-x64" --without-gnutls --with-openssl
+          echo "4--------------------------------------------------------------------------------"
           make -j
+          echo "5--------------------------------------------------------------------------------"
           make install
           popd
+          echo "6--------------------------------------------------------------------------------"
           echo "output directory structure"
           tree "$OUT_DIR"
+          echo "7--------------------------------------------------------------------------------"
           echo "packaging artifact"
           tar -czvf aria2-${ARTIFACT_NAME}.tar.gz -C "$OUT_DIR/aria2" linux-x64
+          echo "8--------------------------------------------------------------------------------"
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
