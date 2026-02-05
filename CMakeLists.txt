@@ -47,9 +47,20 @@ elseif(LINUX)
 
   # target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(APPLE)
+  execute_process(
+    COMMAND brew --prefix
+    OUTPUT_VARIABLE HOMEBREW_PREFIX
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
   target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
   target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
-  target_link_libraries(aria2_c_api PRIVATE libaria2.a libz.a libcares.a libssh2.a libssl.a libcrypto.a libxml2.a sqlite3)
+  target_link_libraries(aria2_c_api PRIVATE libaria2.a libz.a libxml2.a sqlite3
+    "${HOMEBREW_PREFIX}/opt/c-ares/lib/libcares.a"
+    "${HOMEBREW_PREFIX}/opt/libssh2/lib/libssh2.a"
+    "${HOMEBREW_PREFIX}/opt/openssl/lib/libssl.a"
+    "${HOMEBREW_PREFIX}/opt/openssl/lib/libcrypto.a"
+  )
 
 endif()
 
