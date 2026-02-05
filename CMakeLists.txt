@@ -30,9 +30,11 @@ elseif(LINUX)
   target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/linux-x64/lib)
 
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
-  target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 ssl crypto expat sqlite3)
-  target_link_options(aria2_c_api PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script -Wl,-Bdynamic c m dl pthread rt")
+  target_link_libraries(aria2_c_api PRIVATE "-Wl,-Bdynamic c m dl pthread rt")
+  target_link_options(aria2_c_api PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script")
+
+  target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 endif()
 
 install(TARGETS aria2_c_api
