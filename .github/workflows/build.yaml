@@ -164,6 +164,7 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: |
             aria2-${{ env.ARTIFACT_NAME }}.tar.gz
+            aria2_c_api-${{ env.ARTIFACT_NAME }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
