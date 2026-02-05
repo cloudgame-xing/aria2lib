@@ -114,7 +114,7 @@ jobs:
           echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
           sudo apt update
           sudo apt install -y \
-          g++-12 \
+          clang-15 \
           autoconf \
           automake \
           autotools-dev \
@@ -129,8 +129,8 @@ jobs:
           libcppunit-dev
           echo "1--------------------------------------------------------------------------------"
           export OUT_DIR="$PWD/out"
-          echo 'CC=gcc-12' >> $GITHUB_ENV
-          echo 'CXX=g++-12' >> $GITHUB_ENV
+          echo 'CC=clang-15' >> $GITHUB_ENV
+          echo 'CXX=clang++-15' >> $GITHUB_ENV
           pushd aria2
           echo "2--------------------------------------------------------------------------------"
           autoreconf -i
