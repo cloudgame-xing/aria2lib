@@ -208,13 +208,13 @@ jobs:
 
       - name: Compile aria2
         run: |
-          brew install cppunit gettext openssl libssh2 c-ares sqlite3 autoconf automake pkg-config libtool
+          brew install --quiet cppunit gettext openssl libssh2 c-ares sqlite3 autoconf automake pkg-config libtool
           export OUT_DIR="$PWD/out"
           export CC=clang
           export CXX=clang++
           pushd aria2
           autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2" --without-openssl --without-gnutls --with-appletls --disable-nls --enable-libaria2 ARIA2_STATIC=yes LDFLAGS="-static"
+          ./configure --prefix="$OUT_DIR/aria2" --without-openssl --without-gnutls --with-appletls --disable-nls --enable-libaria2 --enable-static --disable-shared ARIA2_STATIC=yes
           make -j"$(nproc 2> /dev/null || sysctl -n hw.ncpu)"
           make install
           popd
