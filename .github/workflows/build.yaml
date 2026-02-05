@@ -114,7 +114,6 @@ jobs:
 
     steps:
       - name: Set ARTIFACT_NAME
-        shell: msys2 {0}
         run: |
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
             NAME="win-x64-${{ github.ref_name }}"
