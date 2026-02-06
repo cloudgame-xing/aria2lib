@@ -282,10 +282,6 @@ jobs:
             ca-certificates \
             python3-docutils
 
-          echo "-----ninja version-----"
-          ninja --version
-          echo "-----echo ninja version-----"
-          echo "ninja version: $(ninja --version)"
           export ROOT_DIR="$PWD"
           export BUILD_DIR="$ROOT_DIR/build"
           mkdir -p "$BUILD_DIR"
@@ -334,9 +330,15 @@ jobs:
           echo "-----build openssl-----"
           curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
           pushd openssl-$OPENSSL_VERSION
-          export ANDROID_NDK_HOME=$NDK PATH=$TOOLCHAIN/bin:$PATH && \
-            ./Configure no-shared --prefix=$PREFIX android-arm64 && \
-            make -j$(nproc) && make install_sw
+          export ANDROID_NDK_HOME=$NDK
+          export PATH=$TOOLCHAIN/bin:$PATH
+          ./Configure no-shared --prefix=$PREFIX android-arm64
+          make -j$(nproc)
+          make install_sw
+          echo "-----ninja version-----"
+          ninja --version
+          echo "-----echo ninja version-----"
+          echo "ninja version: $(ninja --version)"
           popd
           echo "-----build libexpat-----"
           curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
