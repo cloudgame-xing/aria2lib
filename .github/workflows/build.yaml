@@ -414,6 +414,10 @@ jobs:
         run: |
           export OUT_DIR="$PWD/out"
           echo "OUT_DIR=${OUT_DIR}"
+          echo "-----ninja version-----"
+          ninja --version
+          echo "-----echo ninja version-----"
+          echo "ninja version: $(ninja --version)"
           cmake --preset android-debug
           cmake --build --preset android-debug
           cmake --install build/Debug
