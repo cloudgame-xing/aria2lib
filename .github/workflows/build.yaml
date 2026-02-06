@@ -289,7 +289,7 @@ jobs:
           mkdir -p "$DEPS_DIR"
           export PREFIX="$BUILD_DIR/deps/out"
           mkdir -p "$PREFIX"
-          export OUT_DIR="$BUILD_DIR/out"
+          export OUT_DIR="$ROOT_DIR/out"
           mkdir -p "$OUT_DIR"
 
           export NDK_VERSION=r25c
@@ -414,10 +414,6 @@ jobs:
         run: |
           export OUT_DIR="$PWD/out"
           echo "OUT_DIR=${OUT_DIR}"
-          echo "-----ninja version-----"
-          ninja --version
-          echo "-----echo ninja version-----"
-          echo "ninja version: $(ninja --version)"
           cmake --preset android-debug
           cmake --build --preset android-debug
           cmake --install build/Debug
