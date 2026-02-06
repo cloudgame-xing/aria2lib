@@ -403,20 +403,20 @@ jobs:
           echo "packaging artifact"
           tar -czvf aria2-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
 
-      # - name: Compile aria2_c_api
-      #   run: |
-      #     export OUT_DIR="$PWD/out"
-      #     echo "OUT_DIR=${OUT_DIR}"
-      #     cmake --preset debug
-      #     cmake --build --preset debug
-      #     cmake --install build/Debug
-      #     cmake --preset release
-      #     cmake --build --preset release
-      #     cmake --install build/Release --strip
-      #     echo "output directory structure"
-      #     tree "$OUT_DIR"
-      #     echo "packaging artifact"
-      #     tar -czvf aria2_c_api-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
+      - name: Compile aria2_c_api
+        run: |
+          export OUT_DIR="$PWD/out"
+          echo "OUT_DIR=${OUT_DIR}"
+          cmake --preset android-debug
+          cmake --build --preset android-debug
+          cmake --install build/Debug
+          cmake --preset android-release
+          cmake --build --preset android-release
+          cmake --install build/Release --strip
+          echo "output directory structure"
+          tree "$OUT_DIR"
+          echo "packaging artifact"
+          tar -czvf aria2_c_api-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
