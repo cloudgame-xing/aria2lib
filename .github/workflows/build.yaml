@@ -458,6 +458,7 @@ jobs:
 
       - name: Compile aria2
         run: |
+          brew install --quiet gettext autoconf automake pkg-config libtool
           export IOS_MIN_VERSION="12.0"
           export ARCH="arm64"
           export PLATFORM="iPhoneOS"
