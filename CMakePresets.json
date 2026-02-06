@@ -21,6 +21,34 @@
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
+    },
+    {
+      "name": "android-release",
+      "displayName": "Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
+    },
+    {
+      "name": "android-debug",
+      "displayName": "Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
     }
   ],
   "buildPresets": [
@@ -31,6 +59,14 @@
     {
       "name": "release",
       "configurePreset": "release"
+    },
+    {
+      "name": "android-release",
+      "configurePreset": "android-release"
+    },
+    {
+      "name": "android-debug",
+      "configurePreset": "android-debug"
     }
   ]
 }

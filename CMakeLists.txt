@@ -63,6 +63,15 @@ elseif(APPLE)
     "${HOMEBREW_PREFIX}/opt/openssl/lib/libssl.a"
     "${HOMEBREW_PREFIX}/opt/openssl/lib/libcrypto.a"
   )
+elseif(ANDROID)
+  target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
+  target_link_directories(aria2_c_api PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
+  )
+  target_link_libraries(aria2_c_api PRIVATE aria2 z cares ssh2 ssl crypto expat)
+  target_link_options(aria2_c_api PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
+)
 endif()
 
 install(TARGETS aria2_c_api
