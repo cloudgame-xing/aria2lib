@@ -364,7 +364,7 @@ jobs:
               --disable-shared && \
             make -j$(nproc) install
           popd
-
+          popd
 
           pushd aria2
           autoreconf -i
