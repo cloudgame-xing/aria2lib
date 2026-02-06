@@ -282,6 +282,10 @@ jobs:
             ca-certificates \
             python3-docutils
 
+          echo "-----ninja version-----"
+          ninja --version
+          echo "-----echo ninja version-----"
+          echo "ninja version: $(ninja --version)"
           export ROOT_DIR="$PWD"
           export BUILD_DIR="$ROOT_DIR/build"
           mkdir -p "$BUILD_DIR"
