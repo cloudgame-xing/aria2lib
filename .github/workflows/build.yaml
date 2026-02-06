@@ -387,6 +387,7 @@ jobs:
             --prefix=$OUT_DIR/aria2 \
             --host=$HOST \
             --build=`dpkg-architecture -qDEB_BUILD_GNU_TYPE` \
+            --with-pic \
             --disable-nls \
             --without-gnutls \
             --with-openssl \
@@ -399,10 +400,10 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CXXFLAGS="-Os -fPIC" \
-            CFLAGS="-Os -fPIC" \
-            CPPFLAGS="-fPIE -fPIC" \
-            LDFLAGS="-fPIE -fPIC -pie -L$PREFIX/lib -static-libstdc++" \
+            CXXFLAGS="-Os" \
+            CFLAGS="-Os" \
+            CPPFLAGS="-fPIE" \
+            LDFLAGS="-fPIE -pie -L$PREFIX/lib -static-libstdc++" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
           make -j"$(nproc)"
           make install
