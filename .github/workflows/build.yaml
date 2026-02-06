@@ -269,6 +269,7 @@ jobs:
             unzip \
             bzip2 \
             make \
+            ninja-build \
             binutils \
             autoconf \
             automake \
