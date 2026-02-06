@@ -69,7 +69,7 @@ elseif(ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
   )
-  target_link_libraries(aria2_c_api PRIVATE aria2 z cares ssh2 ssl crypto expat sqlite3)
+  target_link_libraries(aria2_c_api PRIVATE aria2 z cares ssh2 ssl crypto expat)
 endif()
 
 install(TARGETS aria2_c_api

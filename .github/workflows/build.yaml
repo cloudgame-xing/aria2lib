@@ -393,10 +393,10 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CXXFLAGS="-Os -g" \
-            CFLAGS="-Os -g" \
-            CPPFLAGS="-fPIE" \
-            LDFLAGS="-fPIE -pie -L$PREFIX/lib -static-libstdc++" \
+            CXXFLAGS="-Os -fPIC" \
+            CFLAGS="-Os -fPIC" \
+            CPPFLAGS="-fPIE -fPIC" \
+            LDFLAGS="-fPIE -fPIC -pie -L$PREFIX/lib -static-libstdc++" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
           make -j"$(nproc)"
           make install
