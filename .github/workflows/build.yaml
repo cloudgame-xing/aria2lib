@@ -281,9 +281,18 @@ jobs:
             ca-certificates \
             python3-docutils
 
+          export ROOT_DIR="$PWD"
+          export BUILD_DIR="$ROOT_DIR/build"
+          mkdir -p "$BUILD_DIR"
+          export DEPS_DIR="$BUILD_DIR/deps"
+          mkdir -p "$DEPS_DIR"
+          export PREFIX="$BUILD_DIR/deps/out"
+          mkdir -p "$PREFIX"
+          export OUT_DIR="$BUILD_DIR/out"
+          mkdir -p "$OUT_DIR"
+
           export NDK_VERSION=r25c
-          export NDK="$PWD/build/android-ndk-$NDK_VERSION"
-          mkdir -p "$PWD/build"
+          export NDK="$BUILD_DIR/android-ndk-$NDK_VERSION"
           export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
           export HOST=aarch64-linux-android
           export API=33
@@ -293,15 +302,15 @@ jobs:
           export LD=$TOOLCHAIN/bin/ld
           export RANDLIB=$TOOLCHAIN/bin/llvm-ranlib
           export STRIP=$TOOLCHAIN/bin/llvm-strip
-          export PREFIX=$PWD/out
           export CFLAGS="-fPIC"
           export CXXFLAGS="-fPIC"
           export LDFLAGS="-fPIC"
-          pushd build
+          cd "$BUILD_DIR"
           echo "Downloading NDK"
           curl -L -O https://dl.google.com/android/repository/android-ndk-$NDK_VERSION-linux.zip
           unzip -q android-ndk-$NDK_VERSION-linux.zip
-          echo "setup deps environment variables"
+          cd "$DEPS_DIR"
+          echo "-----setup deps environment variables-----"
           export OPENSSL_VERSION=1.1.1w
           export OPENSSL_ARCHIVE=openssl-$OPENSSL_VERSION.tar.gz
           export OPENSSL_URI=https://www.openssl.org/source/$OPENSSL_ARCHIVE
@@ -317,14 +326,14 @@ jobs:
           export LIBSSH2_VERSION=1.11.0
           export LIBSSH2_ARCHIVE=libssh2-$LIBSSH2_VERSION.tar.bz2
           export LIBSSH2_URI=https://libssh2.org/download/$LIBSSH2_ARCHIVE
-          echo "build openssl"
+          echo "-----build openssl-----"
           curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
           pushd openssl-$OPENSSL_VERSION
           export ANDROID_NDK_HOME=$NDK PATH=$TOOLCHAIN/bin:$PATH && \
             ./Configure no-shared --prefix=$PREFIX android-arm64 && \
             make -j$(nproc) && make install_sw
           popd
-          echo "build libexpat"
+          echo "-----build libexpat-----"
           curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
           pushd expat-$LIBEXPAT_VERSION
           ./configure \
@@ -334,7 +343,7 @@ jobs:
               --disable-shared && \
             make -j$(nproc) install
           popd
-          echo "build zlib"
+          echo "-----build zlib-----"
           curl -L -O $ZLIB_URI && tar xf $ZLIB_ARCHIVE && rm $ZLIB_ARCHIVE
           pushd zlib-$ZLIB_VERSION
           ./configure \
@@ -344,7 +353,7 @@ jobs:
               --static && \
             make -j$(nproc) install
           popd
-          echo "build c-ares"
+          echo "-----build c-ares-----"
           curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
           pushd c-ares-$CARES_VERSION
           ./configure \
@@ -354,7 +363,7 @@ jobs:
               --disable-shared && \
             make -j$(nproc) install
           popd
-          echo "build libssh2"
+          echo "-----build libssh2-----"
           curl -L -O $LIBSSH2_URI && tar xf $LIBSSH2_ARCHIVE && rm $LIBSSH2_ARCHIVE
           pushd libssh2-$LIBSSH2_VERSION
           ./configure \
@@ -364,12 +373,11 @@ jobs:
               --disable-shared && \
             make -j$(nproc) install
           popd
-          popd
 
-          pushd aria2
+          cd "$ROOT_DIR/aria2"
           autoreconf -i
           ./configure \
-            --prefix=$PREFIX \
+            --prefix=$OUT_DIR/aria2 \
             --host=$HOST \
             --build=`dpkg-architecture -qDEB_BUILD_GNU_TYPE` \
             --disable-nls \
@@ -391,11 +399,9 @@ jobs:
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
           make -j"$(nproc)"
           make install
-          popd
-          echo "output directory structure"
-          tree "$PREFIX"
+
           echo "packaging artifact"
-          tar -czvf aria2-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz out
+          tar -czvf aria2-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
 
       # - name: Compile aria2_c_api
       #   run: |
