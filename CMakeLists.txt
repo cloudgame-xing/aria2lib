@@ -46,7 +46,7 @@ elseif(LINUX)
   )
 
   # target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
-elseif(APPLE)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   execute_process(
     COMMAND brew --prefix
     OUTPUT_VARIABLE HOMEBREW_PREFIX
@@ -70,8 +70,20 @@ elseif(ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
   )
   target_link_libraries(aria2_c_api PRIVATE aria2 z cares ssh2 ssl crypto expat)
-  target_link_options(aria2_c_api PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
-)
+  target_link_options(aria2_c_api PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
+  target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
+  target_link_libraries(aria2_c_api PRIVATE aria2
+    "-framework Security"
+    "-framework CoreFoundation"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libz.a"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libcares.a"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libssh2.a"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libssl.a"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libcrypto.a"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libexpat.a"
+  )
 endif()
 
 install(TARGETS aria2_c_api
