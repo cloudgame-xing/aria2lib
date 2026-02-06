@@ -584,22 +584,21 @@ jobs:
           make install
 
           echo "packaging artifact"
+          cd "$ROOT_DIR"
           tar -czvf aria2-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
 
-      # - name: Compile aria2_c_api
-      #   run: |
-      #     export OUT_DIR="$PWD/out"
-      #     echo "OUT_DIR=${OUT_DIR}"
-      #     cmake --preset android-debug
-      #     cmake --build --preset android-debug
-      #     cmake --install build/Debug
-      #     cmake --preset android-release
-      #     cmake --build --preset android-release
-      #     cmake --install build/Release --strip
-      #     echo "output directory structure"
-      #     tree "$OUT_DIR"
-      #     echo "packaging artifact"
-      #     tar -czvf aria2_c_api-android-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
+      - name: Compile aria2_c_api
+        run: |
+          export OUT_DIR="$PWD/out"
+          echo "OUT_DIR=${OUT_DIR}"
+          cmake --preset ios-debug
+          cmake --build --preset ios-debug
+          cmake --install build/Debug
+          cmake --preset ios-release
+          cmake --build --preset ios-release
+          cmake --install build/Release --strip
+          echo "packaging artifact"
+          tar -czvf aria2_c_api-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
@@ -608,6 +607,7 @@ jobs:
           name: ios-arm64-${{ needs.setup.outputs.version_name }}-${{ github.run_number }}
           path: |
             aria2-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
           retention-days: 30
           if-no-files-found: error
 
@@ -617,4 +617,5 @@ jobs:
         with:
           files: |
             aria2-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-ios-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
           fail_on_unmatched_files: true
