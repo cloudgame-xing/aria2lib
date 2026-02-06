@@ -472,11 +472,12 @@ jobs:
           export HOST="arm-apple-darwin"
           export CXXFLAGS="${CFLAGS}"
           export LDFLAGS="-arch ${ARCH} -isysroot ${SDK_PATH}"
-          export BUILD_DIR="${PWD}/build"
+          export ROOT_DIR="${PWD}"
+          export BUILD_DIR="${ROOT_DIR}/build"
           export DEPS_DIR="${BUILD_DIR}/deps"
           mkdir -p ${DEPS_DIR}
           export PREFIX="${DEPS_DIR}/out"
-          export OUT_DIR="${PWD}/out"
+          export OUT_DIR="${ROOT_DIR}/out"
           export PKG_CONFIG_LIBDIR="${PREFIX}/lib/pkgconfig"
           mkdir -p ${PREFIX}
 
