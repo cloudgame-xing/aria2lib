@@ -469,7 +469,7 @@ jobs:
           export AR=$(xcrun --sdk $(echo $PLATFORM | tr '[:upper:]' '[:lower:]') -f ar)
           export RANLIB=$(xcrun --sdk $(echo $PLATFORM | tr '[:upper:]' '[:lower:]') -f ranlib)
           export STRIP=$(xcrun --sdk $(echo $PLATFORM | tr '[:upper:]' '[:lower:]') -f strip)
-          export CFLAGS="-arch ${ARCH} -isysroot ${SDK_PATH} -mios-version-min=${IOS_MIN_VERSION} -fPIC -fembed-bitcode -O2"
+          export CFLAGS="-arch ${ARCH} -isysroot ${SDK_PATH} -mios-version-min=${IOS_MIN_VERSION} -fPIC -O2"
           export HOST="arm-apple-darwin"
           export CXXFLAGS="${CFLAGS}"
           export LDFLAGS="-arch ${ARCH} -isysroot ${SDK_PATH}"
