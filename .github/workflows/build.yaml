@@ -395,7 +395,7 @@ jobs:
           echo "output directory structure"
           tree "$PREFIX"
           echo "packaging artifact"
-          tar -czvf aria2-linux-x64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$PREFIX" aria2
+          tar -czvf aria2-linux-x64-${{ needs.setup.outputs.version_name }}.tar.gz build
 
       # - name: Compile aria2_c_api
       #   run: |
