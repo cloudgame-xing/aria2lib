@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-if(MINGW)
-  set(CMAKE_GNUtoMS ON)
-endif()
+set(CMAKE_GNUtoMS ON)
 
 project(aria2_c_api_demo LANGUAGES CXX)
 
