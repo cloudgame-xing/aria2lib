@@ -19,6 +19,7 @@ target_include_directories(aria2_c_api_main PRIVATE src)
 target_link_libraries(aria2_c_api_main PRIVATE aria2_c_api)
 
 if(MINGW)
+  set(CMAKE_GNUtoMS ON)
   target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
   target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
   target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 ssl crypto expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32)
