@@ -142,7 +142,7 @@ jobs:
           export BUILD_DIR="$PWD/build"
           mkdir -p "$BUILD_DIR"
           cd "$BUILD_DIR"
-          curl -L -o llvm-mingw.tar.xz "https://github.com/mstorsjo/llvm-mingw/releases/download/20260224/llvm-mingw-20260224-ucrt-ubuntu-22.04-x86_64.tar.xz"
+          curl -L -o llvm-mingw.tar.xz "https://github.com/mstorsjo/llvm-mingw/releases/download/20260224/llvm-mingw-20260224-msvcrt-ubuntu-22.04-x86_64.tar.xz"
           tar xf llvm-mingw.tar.xz
           rm llvm-mingw.tar.xz
           echo "LLVM_MINGW_DIR=$BUILD_DIR/$(ls -d llvm-mingw-* | head -1)" >> "$GITHUB_ENV"
