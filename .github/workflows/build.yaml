@@ -172,7 +172,7 @@ jobs:
 
           cd "$DEPS_DIR"
 
-          export OPENSSL_VERSION=3.2.1
+          export OPENSSL_VERSION=3.4.4
           export OPENSSL_ARCHIVE=openssl-$OPENSSL_VERSION.tar.gz
           export OPENSSL_URI=https://www.openssl.org/source/$OPENSSL_ARCHIVE
           export LIBEXPAT_VERSION=2.5.0
@@ -191,7 +191,7 @@ jobs:
           echo "-----build openssl-----"
           curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
           pushd openssl-$OPENSSL_VERSION
-          ./Configure mingw64-arm64 no-shared --prefix=$PREFIX
+          ./Configure mingwarm64 no-shared no-asm --prefix=$PREFIX
           make -j$(nproc)
           make install_sw
           popd
