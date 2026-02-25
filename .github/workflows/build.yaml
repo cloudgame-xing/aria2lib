@@ -192,39 +192,39 @@ jobs:
           export LIBSSH2_ARCHIVE=libssh2-$LIBSSH2_VERSION.tar.bz2
           export LIBSSH2_URI=https://libssh2.org/download/$LIBSSH2_ARCHIVE
 
-          echo "-----build zlib-----"
-          curl -L -O $ZLIB_URI && tar xf $ZLIB_ARCHIVE && rm $ZLIB_ARCHIVE
-          pushd zlib-$ZLIB_VERSION
-          CC=$CC AR=$AR RANLIB=$RANLIB STRIP=$STRIP LD=$CC ./configure --prefix=$PREFIX --libdir=$PREFIX/lib --includedir=$PREFIX/include --static
-          make -j$(nproc) install
-          popd
+          # echo "-----build zlib-----"
+          # curl -L -O $ZLIB_URI && tar xf $ZLIB_ARCHIVE && rm $ZLIB_ARCHIVE
+          # pushd zlib-$ZLIB_VERSION
+          # CC=$CC AR=$AR RANLIB=$RANLIB STRIP=$STRIP LD=$CC ./configure --prefix=$PREFIX --libdir=$PREFIX/lib --includedir=$PREFIX/include --static
+          # make -j$(nproc) install
+          # popd
 
-          echo "-----build libexpat-----"
-          curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
-          pushd expat-$LIBEXPAT_VERSION
-          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared
-          make -j$(nproc) install
-          popd
+          # echo "-----build libexpat-----"
+          # curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
+          # pushd expat-$LIBEXPAT_VERSION
+          # ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared
+          # make -j$(nproc) install
+          # popd
 
-          echo "-----build gmp-----"
-          curl -L -O $GMP_URI && tar xf $GMP_ARCHIVE && rm $GMP_ARCHIVE
-          pushd gmp-$GMP_VERSION
-          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --disable-cxx --enable-static
-          make -j$(nproc) install
-          popd
+          # echo "-----build gmp-----"
+          # curl -L -O $GMP_URI && tar xf $GMP_ARCHIVE && rm $GMP_ARCHIVE
+          # pushd gmp-$GMP_VERSION
+          # ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --disable-cxx --enable-static
+          # make -j$(nproc) install
+          # popd
 
-          echo "-----build sqlite3-----"
-          curl -L -O $SQLITE_URI && tar xf $SQLITE_ARCHIVE && rm $SQLITE_ARCHIVE
-          pushd sqlite-autoconf-$SQLITE_VERSION
-          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --enable-static
-          make -j$(nproc) install
-          popd
+          # echo "-----build sqlite3-----"
+          # curl -L -O $SQLITE_URI && tar xf $SQLITE_ARCHIVE && rm $SQLITE_ARCHIVE
+          # pushd sqlite-autoconf-$SQLITE_VERSION
+          # ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --enable-static
+          # make -j$(nproc) install
+          # popd
 
           echo "-----build c-ares-----"
           curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
           pushd c-ares-$CARES_VERSION
           ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random LIBS="-lws2_32"
-          make -j$(nproc) install
+          make CPPFLAGS="-UHAVE_IF_INDEXTONAME" -j$(nproc) install
           popd
 
           echo "-----build libssh2 (wincng)-----"
