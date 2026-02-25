@@ -251,7 +251,7 @@ jobs:
             --with-libcares \
             --with-libz \
             --with-libgmp \
-            --without-libssh2 \
+            --with-libssh2 \
             --without-libgcrypt \
             --without-libnettle \
             --enable-libaria2 \

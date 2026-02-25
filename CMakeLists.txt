@@ -27,7 +27,7 @@ if(MINGW AND ARIA2_WIN_ARM64_CROSS)
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
   )
-  target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32 bcrypt)
+  target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32 bcrypt)
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(MINGW)
