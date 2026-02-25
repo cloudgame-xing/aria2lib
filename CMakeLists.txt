@@ -18,7 +18,19 @@ add_executable(aria2_c_api_main
 target_include_directories(aria2_c_api_main PRIVATE src)
 target_link_libraries(aria2_c_api_main PRIVATE aria2_c_api)
 
-if(MINGW)
+if(MINGW AND ARIA2_WIN_ARM64_CROSS)
+  target_include_directories(aria2_c_api PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
+  )
+  target_link_directories(aria2_c_api PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
+  )
+  target_link_libraries(aria2_c_api PRIVATE aria2 z cares ssh2 ssl crypto expat secur32 crypt32 wsock32 iphlpapi ws2_32)
+  target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
+  target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
+elseif(MINGW)
   target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
   target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
   target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 ssl crypto expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32)
