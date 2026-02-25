@@ -223,8 +223,8 @@ jobs:
           echo "-----build c-ares-----"
           curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
           pushd c-ares-$CARES_VERSION
-          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random LIBS="-lws2_32"
-          make CPPFLAGS="-UHAVE_IF_INDEXTONAME" CFLAGS="-UHAVE_IF_INDEXTONAME" -j$(nproc) install
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random CFLAGS="-D_WIN32_WINNT=0x0602 -include netioapi.h" LIBS="-lws2_32"
+          make -j$(nproc) install
           popd
 
           echo "-----build libssh2 (wincng)-----"
