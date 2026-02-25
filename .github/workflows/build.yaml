@@ -181,7 +181,7 @@ jobs:
           export LIBEXPAT_URI=https://github.com/libexpat/libexpat/releases/download/R_2_5_0/$LIBEXPAT_ARCHIVE
           export GMP_VERSION=6.3.0
           export GMP_ARCHIVE=gmp-$GMP_VERSION.tar.xz
-          export GMP_URI=https://gmplib.org/download/gmp/$GMP_ARCHIVE
+          export GMP_URI=https://ftpmirror.gnu.org/gmp/$GMP_ARCHIVE
           export SQLITE_VERSION=3430100
           export SQLITE_ARCHIVE=sqlite-autoconf-$SQLITE_VERSION.tar.gz
           export SQLITE_URI=https://www.sqlite.org/2023/$SQLITE_ARCHIVE
