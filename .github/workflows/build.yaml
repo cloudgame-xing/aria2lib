@@ -223,7 +223,7 @@ jobs:
           echo "-----build c-ares-----"
           curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
           pushd c-ares-$CARES_VERSION
-          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random CFLAGS="-include netioapi.h" CPPFLAGS="-D_WIN32_WINNT=0x0602" LIBS="-lws2_32"
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random ac_cv_func_if_indextoname=no LIBS="-lws2_32"
           make -j$(nproc) install
           popd
 
