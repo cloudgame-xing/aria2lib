@@ -191,6 +191,7 @@ jobs:
           echo "-----build openssl-----"
           curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
           pushd openssl-$OPENSSL_VERSION
+          patch -p1 < "$ROOT_DIR/.github/patches/openssl-mingwarm64.patch"
           ./Configure mingwarm64 no-shared no-asm --prefix=$PREFIX
           make -j$(nproc)
           make install_sw
