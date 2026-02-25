@@ -120,6 +120,99 @@ jobs:
             aria2_c_api-win-x64-${{ needs.setup.outputs.version_name }}.tar.gz
           fail_on_unmatched_files: true
 
+  build-win-arm64:
+    needs: setup
+    runs-on: windows-2025
+
+    steps:
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANGARM64
+          update: true
+          install: >-
+            make
+            base-devel
+            pkgconf
+            tree
+            autoconf
+            automake
+            autotools
+            gettext-devel
+            mingw-w64-clang-aarch64-toolchain
+            mingw-w64-clang-aarch64-pkg-config
+            mingw-w64-clang-aarch64-cmake
+            mingw-w64-clang-aarch64-ninja
+            mingw-w64-clang-aarch64-zlib
+            mingw-w64-clang-aarch64-libssh2
+            mingw-w64-clang-aarch64-c-ares
+
+      - name: Force LF on checkout (git config)
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          git config --global core.safecrlf true
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: echo VERSION_NAME
+        shell: msys2 {0}
+        run: |
+          echo "VERSION_NAME=${{ needs.setup.outputs.version_name }}"
+
+      - name: Compile aria2
+        shell: msys2 {0}
+        run: |
+          clang -v
+          export OUT_DIR="$PWD/out"
+          export CC=clang
+          export CXX=clang++
+          pushd aria2
+          autoreconf -i
+          ./configure --prefix="$OUT_DIR/aria2" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
+          make -j
+          make install
+          popd
+          echo "packaging artifact"
+          tar -czvf aria2-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
+
+      - name: Compile aria2_c_api
+        shell: msys2 {0}
+        run: |
+          export OUT_DIR="$PWD/out"
+          export CC=clang
+          export CXX=clang++
+          cmake --preset debug
+          cmake --build --preset debug
+          cmake --install build/Debug
+          cmake --preset release
+          cmake --build --preset release
+          cmake --install build/Release --strip
+          tar -czvf aria2_c_api-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
+
+      - name: Upload to Artifacts (for non-release builds)
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-arm64-${{ needs.setup.outputs.version_name }}-${{ github.run_number }}
+          path: |
+            aria2-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload to Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            aria2-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+            aria2_c_api-win-arm64-${{ needs.setup.outputs.version_name }}.tar.gz
+          fail_on_unmatched_files: true
+
   build-linux-x64:
     needs: setup
     runs-on: ubuntu-22.04
