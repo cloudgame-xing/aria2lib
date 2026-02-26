@@ -215,7 +215,7 @@ build_linux_arm64() {
   echo "-----build openssl-----"
   curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
   pushd openssl-$OPENSSL_VERSION
-  ./Configure linux-aarch64 no-shared --prefix=$PREFIX --cross-compiler-prefix=aarch64-linux-gnu-
+  ./Configure linux-aarch64 no-shared --prefix=$PREFIX
   make -j$NPROC
   make install_sw
   popd
