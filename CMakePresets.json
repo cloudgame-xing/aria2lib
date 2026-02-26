@@ -2,64 +2,6 @@
   "version": 6,
   "configurePresets": [
     {
-      "name": "android-arm64-release",
-      "displayName": "Android ARM64 Release",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
-        "ANDROID_ABI": "arm64-v8a",
-        "ANDROID_PLATFORM": "android-24",
-        "ANDROID_STL": "c++_static"
-      }
-    },
-    {
-      "name": "android-arm64-debug",
-      "displayName": "Android ARM64 Debug",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
-        "ANDROID_ABI": "arm64-v8a",
-        "ANDROID_PLATFORM": "android-24",
-        "ANDROID_STL": "c++_static"
-      }
-    },
-    {
-      "name": "ios-arm64-release",
-      "displayName": "iOS ARM64 Release",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
-        "CMAKE_SYSTEM_NAME": "iOS",
-        "CMAKE_OSX_ARCHITECTURES": "arm64",
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
-        "CMAKE_OSX_SYSROOT": "iphoneos",
-        "CMAKE_MACOSX_BUNDLE": "OFF"
-      }
-    },
-    {
-      "name": "ios-arm64-debug",
-      "displayName": "iOS ARM64 Debug",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
-        "CMAKE_SYSTEM_NAME": "iOS",
-        "CMAKE_OSX_ARCHITECTURES": "arm64",
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
-        "CMAKE_OSX_SYSROOT": "iphoneos",
-        "CMAKE_MACOSX_BUNDLE": "OFF"
-      }
-    },
-    {
       "name": "windows-arm64-release",
       "displayName": "Windows ARM64 Release",
       "generator": "Ninja",
@@ -147,34 +89,6 @@
       }
     },
     {
-      "name": "android-x64-release",
-      "displayName": "Android x64 Release",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
-        "ANDROID_ABI": "x86_64",
-        "ANDROID_PLATFORM": "android-24",
-        "ANDROID_STL": "c++_static"
-      }
-    },
-    {
-      "name": "android-x64-debug",
-      "displayName": "Android x64 Debug",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
-        "ANDROID_ABI": "x86_64",
-        "ANDROID_PLATFORM": "android-24",
-        "ANDROID_STL": "c++_static"
-      }
-    },
-    {
       "name": "macos-arm64-release",
       "displayName": "macOS ARM64 Release",
       "generator": "Ninja",
@@ -224,25 +138,95 @@
         "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
         "ARIA2_MACOS_X64_CROSS": "ON"
       }
-    }
-  ],
-  "buildPresets": [
+    },
     {
       "name": "android-arm64-release",
-      "configurePreset": "android-arm64-release"
+      "displayName": "Android ARM64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
     },
     {
       "name": "android-arm64-debug",
-      "configurePreset": "android-arm64-debug"
+      "displayName": "Android ARM64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
+    },
+    {
+      "name": "android-x64-release",
+      "displayName": "Android x64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "x86_64",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
+    },
+    {
+      "name": "android-x64-debug",
+      "displayName": "Android x64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "x86_64",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
     },
     {
       "name": "ios-arm64-release",
-      "configurePreset": "ios-arm64-release"
+      "displayName": "iOS ARM64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_SYSTEM_NAME": "iOS",
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
+        "CMAKE_OSX_SYSROOT": "iphoneos",
+        "CMAKE_MACOSX_BUNDLE": "OFF"
+      }
     },
     {
       "name": "ios-arm64-debug",
-      "configurePreset": "ios-arm64-debug"
-    },
+      "displayName": "iOS ARM64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_SYSTEM_NAME": "iOS",
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
+        "CMAKE_OSX_SYSROOT": "iphoneos",
+        "CMAKE_MACOSX_BUNDLE": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
     {
       "name": "windows-arm64-release",
       "configurePreset": "windows-arm64-release"
@@ -276,14 +260,6 @@
       "configurePreset": "linux-x64-debug"
     },
     {
-      "name": "android-x64-release",
-      "configurePreset": "android-x64-release"
-    },
-    {
-      "name": "android-x64-debug",
-      "configurePreset": "android-x64-debug"
-    },
-    {
       "name": "macos-arm64-release",
       "configurePreset": "macos-arm64-release"
     },
@@ -298,6 +274,30 @@
     {
       "name": "macos-x64-debug",
       "configurePreset": "macos-x64-debug"
+    },
+    {
+      "name": "android-arm64-release",
+      "configurePreset": "android-arm64-release"
+    },
+    {
+      "name": "android-arm64-debug",
+      "configurePreset": "android-arm64-debug"
+    },
+    {
+      "name": "android-x64-release",
+      "configurePreset": "android-x64-release"
+    },
+    {
+      "name": "android-x64-debug",
+      "configurePreset": "android-x64-debug"
+    },
+    {
+      "name": "ios-arm64-release",
+      "configurePreset": "ios-arm64-release"
+    },
+    {
+      "name": "ios-arm64-debug",
+      "configurePreset": "ios-arm64-debug"
     }
   ]
 }
