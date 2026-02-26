@@ -174,7 +174,7 @@ jobs:
             LDFLAGS="-L$PREFIX/lib" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
             ARIA2_STATIC=yes
-          make -j$(nproc)
+          make -j$(nproc) V=1
           make install
 
           cd "$ROOT_DIR"
