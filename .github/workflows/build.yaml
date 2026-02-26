@@ -33,70 +33,161 @@ jobs:
 
   build-win-x64:
     needs: setup
-    runs-on: windows-2025
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Set up MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: mingw64
-          update: true
-          install: >-
-            make
-            base-devel
-            pkgconf
-            tree
-            autoconf
-            automake
-            autotools
-            gettext-devel
-            mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-pkg-config
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-zlib
-            mingw-w64-x86_64-libssh2
-            mingw-w64-x86_64-c-ares
-
-      - name: Force LF on checkout (git config)
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-          git config --global core.safecrlf true
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: echo VERSION_NAME
-        shell: msys2 {0}
+      - name: Install build dependencies
         run: |
-          echo "VERSION_NAME=${{ needs.setup.outputs.version_name }}"
+          sudo apt update
+          sudo apt install -y --no-install-recommends \
+            unzip xz-utils bzip2 make ninja-build binutils \
+            autoconf automake autotools-dev autopoint libtool pkg-config \
+            dpkg-dev curl ca-certificates python3-docutils cmake
+
+      - name: Download and extract llvm-mingw
+        run: |
+          export BUILD_DIR="$PWD/build"
+          mkdir -p "$BUILD_DIR"
+          cd "$BUILD_DIR"
+          curl -L -o llvm-mingw.tar.xz "https://github.com/mstorsjo/llvm-mingw/releases/download/20260224/llvm-mingw-20260224-msvcrt-ubuntu-22.04-x86_64.tar.xz"
+          tar xf llvm-mingw.tar.xz
+          rm llvm-mingw.tar.xz
+          echo "LLVM_MINGW_DIR=$BUILD_DIR/$(ls -d llvm-mingw-* | head -1)" >> "$GITHUB_ENV"
 
       - name: Compile aria2
-        shell: msys2 {0}
         run: |
-          gcc -v
-          export OUT_DIR="$PWD/out"
-          pushd aria2
-          autoreconf -i
-          ./configure --prefix="$OUT_DIR/aria2" --without-included-gettext --disable-nls --with-libcares --without-gnutls --without-openssl --with-sqlite3 --without-libxml2 --with-libexpat --with-libz --with-libgmp --with-libssh2 --without-libgcrypt --without-libnettle --enable-libaria2 ARIA2_STATIC=yes
-          make -j
-          make install
+          export ROOT_DIR="$PWD"
+          export BUILD_DIR="$ROOT_DIR/build"
+          export DEPS_DIR="$BUILD_DIR/deps"
+          mkdir -p "$DEPS_DIR"
+          export PREFIX="$DEPS_DIR/out"
+          mkdir -p "$PREFIX"
+          export OUT_DIR="$ROOT_DIR/out"
+          mkdir -p "$OUT_DIR"
+
+          export LLVM_MINGW="$LLVM_MINGW_DIR"
+          export PATH="$LLVM_MINGW/bin:$PATH"
+          export HOST=x86_64-w64-mingw32
+          export CC=$HOST-clang
+          export CXX=$HOST-clang++
+          export AR=llvm-ar
+          export RANLIB=llvm-ranlib
+          export STRIP=llvm-strip
+          export CFLAGS="-O2"
+          export CXXFLAGS="-O2"
+          export LDFLAGS="-L$PREFIX/lib"
+
+          cd "$DEPS_DIR"
+
+          # 版本号参考 android/ios/macos/Dockerfile.mingw
+          export ZLIB_VERSION=1.3.1
+          export ZLIB_ARCHIVE=zlib-$ZLIB_VERSION.tar.gz
+          export ZLIB_URI=https://github.com/madler/zlib/releases/download/v1.3.1/$ZLIB_ARCHIVE
+          export LIBEXPAT_VERSION=2.5.0
+          export LIBEXPAT_ARCHIVE=expat-$LIBEXPAT_VERSION.tar.bz2
+          export LIBEXPAT_URI=https://github.com/libexpat/libexpat/releases/download/R_2_5_0/$LIBEXPAT_ARCHIVE
+          export GMP_VERSION=6.3.0
+          export GMP_ARCHIVE=gmp-$GMP_VERSION.tar.xz
+          export GMP_URI=https://ftpmirror.gnu.org/gmp/$GMP_ARCHIVE
+          export SQLITE_VERSION=3430100
+          export SQLITE_ARCHIVE=sqlite-autoconf-$SQLITE_VERSION.tar.gz
+          export SQLITE_URI=https://www.sqlite.org/2023/$SQLITE_ARCHIVE
+          export CARES_VERSION=1.21.0
+          export CARES_ARCHIVE=c-ares-$CARES_VERSION.tar.gz
+          export CARES_URI=https://github.com/c-ares/c-ares/releases/download/cares-1_21_0/$CARES_ARCHIVE
+          export LIBSSH2_VERSION=1.11.0
+          export LIBSSH2_ARCHIVE=libssh2-$LIBSSH2_VERSION.tar.bz2
+          export LIBSSH2_URI=https://libssh2.org/download/$LIBSSH2_ARCHIVE
+
+          echo "-----build zlib-----"
+          curl -L -O $ZLIB_URI && tar xf $ZLIB_ARCHIVE && rm $ZLIB_ARCHIVE
+          pushd zlib-$ZLIB_VERSION
+          CC=$CC AR=$AR RANLIB=$RANLIB STRIP=$STRIP LD=$CC ./configure --prefix=$PREFIX --libdir=$PREFIX/lib --includedir=$PREFIX/include --static
+          make -j$(nproc) install
           popd
+
+          echo "-----build libexpat-----"
+          curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
+          pushd expat-$LIBEXPAT_VERSION
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared
+          make -j$(nproc) install
+          popd
+
+          echo "-----build gmp-----"
+          curl -L -O $GMP_URI && tar xf $GMP_ARCHIVE && rm $GMP_ARCHIVE
+          pushd gmp-$GMP_VERSION
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --disable-cxx --enable-static
+          make -j$(nproc) install
+          popd
+
+          echo "-----build sqlite3-----"
+          curl -L -O $SQLITE_URI && tar xf $SQLITE_ARCHIVE && rm $SQLITE_ARCHIVE
+          pushd sqlite-autoconf-$SQLITE_VERSION
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --enable-static
+          make -j$(nproc) install
+          popd
+
+          echo "-----build c-ares-----"
+          curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
+          pushd c-ares-$CARES_VERSION
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --without-random ac_cv_func_if_indextoname=no LIBS="-lws2_32"
+          make -j$(nproc) install
+          popd
+
+          echo "-----build libssh2 (wincng)-----"
+          curl -L -O $LIBSSH2_URI && tar xf $LIBSSH2_ARCHIVE && rm $LIBSSH2_ARCHIVE
+          pushd libssh2-$LIBSSH2_VERSION
+          ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --with-crypto=wincng LIBS="-lws2_32"
+          make -j$(nproc) install
+          popd
+
+          echo "-----build aria2-----"
+          cd "$ROOT_DIR/aria2"
+          autoreconf -i
+          ./configure \
+            --prefix=$OUT_DIR/aria2 \
+            --host=$HOST \
+            --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) \
+            --disable-nls \
+            --without-gnutls \
+            --without-openssl \
+            --with-wintls \
+            --with-sqlite3 \
+            --without-libxml2 \
+            --with-libexpat \
+            --with-libcares \
+            --with-libz \
+            --with-libgmp \
+            --with-libssh2 \
+            --without-libgcrypt \
+            --without-libnettle \
+            --enable-libaria2 \
+            --enable-static \
+            --disable-shared \
+            CPPFLAGS="-I$PREFIX/include" \
+            LDFLAGS="-L$PREFIX/lib" \
+            PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
+            ARIA2_STATIC=yes
+          make -j$(nproc)
+          make install
+
+          cd "$ROOT_DIR"
           echo "packaging artifact"
           tar -czvf aria2-win-x64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2
 
       - name: Compile aria2_c_api
-        shell: msys2 {0}
         run: |
+          export LLVM_MINGW="$LLVM_MINGW_DIR"
           export OUT_DIR="$PWD/out"
-          cmake --preset debug
-          cmake --build --preset debug
+          cmake --preset win-x64-debug
+          cmake --build --preset win-x64-debug
           cmake --install build/Debug
-          cmake --preset release
-          cmake --build --preset release
+          cmake --preset win-x64-release
+          cmake --build --preset win-x64-release
           cmake --install build/Release --strip
           tar -czvf aria2_c_api-win-x64-${{ needs.setup.outputs.version_name }}.tar.gz -C "$OUT_DIR" aria2lib
 

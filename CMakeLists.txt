@@ -18,7 +18,7 @@ add_executable(aria2_c_api_main
 target_include_directories(aria2_c_api_main PRIVATE src)
 target_link_libraries(aria2_c_api_main PRIVATE aria2_c_api)
 
-if(MINGW AND ARIA2_WIN_ARM64_CROSS)
+if(MINGW AND (ARIA2_WIN_ARM64_CROSS OR ARIA2_WIN_X64_CROSS))
   target_include_directories(aria2_c_api PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
