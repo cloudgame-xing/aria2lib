@@ -168,8 +168,9 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CPPFLAGS="-I$PREFIX/include" \
-            CXXFLAGS="-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -include cstdint" \
+            CPPFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -include stdint.h" \
+            CFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -include stdint.h" \
+            CXXFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -include stdint.h" \
             LDFLAGS="-L$PREFIX/lib" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
             ARIA2_STATIC=yes
