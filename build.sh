@@ -170,11 +170,11 @@ build_linux_x64() {
   tar -czvf "aria2-linux-x64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2
 
   export OUT_DIR="$ROOT_DIR/out"
-  cmake --preset debug
-  cmake --build --preset debug
+  cmake --preset linux-x64-debug
+  cmake --build --preset linux-x64-debug
   cmake --install build/Debug
-  cmake --preset release
-  cmake --build --preset release
+  cmake --preset linux-x64-release
+  cmake --build --preset linux-x64-release
   cmake --install build/Release --strip
   tree "$OUT_DIR" || true
   tar -czvf "aria2_c_api-linux-x64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2lib
@@ -317,11 +317,11 @@ build_macos_arm64() {
   tar -czvf "aria2-macos-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2
 
   export OUT_DIR="$ROOT_DIR/out"
-  cmake --preset debug
-  cmake --build --preset debug
+  cmake --preset macos-arm64-debug
+  cmake --build --preset macos-arm64-debug
   cmake --install build/Debug
-  cmake --preset release
-  cmake --build --preset release
+  cmake --preset macos-arm64-release
+  cmake --build --preset macos-arm64-release
   cmake --install build/Release --strip
   tar -czvf "aria2_c_api-macos-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2lib
 }
@@ -430,11 +430,11 @@ build_android_arm64() {
   tar -czvf "aria2-android-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2
 
   export OUT_DIR="$ROOT_DIR/out"
-  cmake --preset android-debug
-  cmake --build --preset android-debug
+  cmake --preset android-arm64-debug
+  cmake --build --preset android-arm64-debug
   cmake --install build/Debug
-  cmake --preset android-release
-  cmake --build --preset android-release
+  cmake --preset android-arm64-release
+  cmake --build --preset android-arm64-release
   cmake --install build/Release --strip
   tree "$OUT_DIR" || true
   tar -czvf "aria2_c_api-android-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2lib
@@ -662,11 +662,11 @@ build_ios_arm64() {
   tar -czvf "aria2-ios-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2
 
   export OUT_DIR="$ROOT_DIR/out"
-  cmake --preset ios-debug
-  cmake --build --preset ios-debug
+  cmake --preset ios-arm64-debug
+  cmake --build --preset ios-arm64-debug
   cmake --install build/Debug
-  cmake --preset ios-release
-  cmake --build --preset ios-release
+  cmake --preset ios-arm64-release
+  cmake --build --preset ios-arm64-release
   cmake --install build/Release --strip
   tar -czvf "aria2_c_api-ios-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2lib
 }
