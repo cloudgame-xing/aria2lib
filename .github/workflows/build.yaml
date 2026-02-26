@@ -69,8 +69,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Clone aria2
+        run: git clone --depth 1 https://github.com/aria2/aria2.git aria2
 
       - name: Install build dependencies (Ubuntu, windows cross)
         if: runner.os == 'Linux' && matrix.os == 'windows'
