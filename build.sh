@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Build aria2 and aria2_c_api for a given OS and arch.
 # Usage: build.sh <os> <arch>
-# Example: build.sh win x64
+# Example: build.sh windows x64
 # Requires: VERSION_NAME in environment (for tarball names).
-# For win-*: expects LLVM_MINGW_DIR set (by workflow after extracting llvm-mingw).
+# For windows-*: expects LLVM_MINGW_DIR set (by workflow after extracting llvm-mingw).
 # For android: expects NDK extracted under build/android-ndk-*.
 
 set -e
@@ -23,7 +23,7 @@ case "$(uname -s)" in
   *)      NPROC=$(nproc 2>/dev/null || echo 2) ;;
 esac
 
-build_win_mingw() {
+build_windows_mingw() {
   local host="$1"
   local suffix="$2"
   local cmake_preset_debug="$3"
@@ -780,11 +780,11 @@ build_macos_x64() {
 
 # Dispatch
 case "${OS}-${ARCH}" in
-  win-x64)
-    build_win_mingw x86_64-w64-mingw32 win-x64 win-x64-debug win-x64-release "yes" "V=1"
+  windows-x64)
+    build_windows_mingw x86_64-w64-mingw32 windows-x64 windows-x64-debug windows-x64-release "yes" "V=1"
     ;;
-  win-arm64)
-    build_win_mingw aarch64-w64-mingw32 win-arm64 win-arm64-debug win-arm64-release "" ""
+  windows-arm64)
+    build_windows_mingw aarch64-w64-mingw32 windows-arm64 windows-arm64-debug windows-arm64-release "" ""
     ;;
   linux-x64)
     build_linux_x64

@@ -40,10 +40,10 @@ jobs:
       matrix:
         include:
           - runner: ubuntu-22.04
-            os: win
+            os: windows
             arch: x64
           - runner: ubuntu-22.04
-            os: win
+            os: windows
             arch: arm64
           - runner: ubuntu-22.04
             os: linux
@@ -72,8 +72,8 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install build dependencies (Ubuntu, win cross)
-        if: runner.os == 'Linux' && matrix.os == 'win'
+      - name: Install build dependencies (Ubuntu, windows cross)
+        if: runner.os == 'Linux' && matrix.os == 'windows'
         run: |
           sudo apt update
           sudo apt install -y --no-install-recommends \
@@ -186,7 +186,7 @@ jobs:
           brew install --quiet gettext autoconf automake pkg-config libtool
 
       - name: Download and extract llvm-mingw
-        if: matrix.os == 'win'
+        if: matrix.os == 'windows'
         run: |
           export BUILD_DIR="$PWD/build"
           mkdir -p "$BUILD_DIR"

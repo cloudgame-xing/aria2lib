@@ -23,4 +23,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 # Mark cross-compile so CMakeLists.txt can add build/deps/out for static libs
-set(ARIA2_WIN_ARM64_CROSS 1 CACHE INTERNAL "")
+set(ARIA2_WINDOWS_ARM64_CROSS 1 CACHE INTERNAL "")

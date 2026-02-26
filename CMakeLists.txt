@@ -18,7 +18,7 @@ add_executable(aria2_c_api_main
 target_include_directories(aria2_c_api_main PRIVATE src)
 target_link_libraries(aria2_c_api_main PRIVATE aria2_c_api)
 
-if(MINGW AND (ARIA2_WIN_ARM64_CROSS OR ARIA2_WIN_X64_CROSS))
+if(MINGW)
   target_include_directories(aria2_c_api PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
@@ -28,13 +28,6 @@ if(MINGW AND (ARIA2_WIN_ARM64_CROSS OR ARIA2_WIN_X64_CROSS))
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
   )
   target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32 bcrypt)
-  target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
-  target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
-elseif(MINGW)
-  target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
-  target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
-  target_link_libraries(aria2_c_api PRIVATE aria2 gmp z cares ssh2 ssl crypto expat sqlite3 secur32 crypt32 wsock32 iphlpapi ws2_32)
-
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(LINUX)
@@ -54,20 +47,20 @@ elseif(LINUX)
       c m dl pthread rt
     )
   else()
-  target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
-  target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
+    target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
+    target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
 
-  target_link_options(aria2_c_api PRIVATE
-    -static-libstdc++
-    -static-libgcc
-  )
+    target_link_options(aria2_c_api PRIVATE
+      -static-libstdc++
+      -static-libgcc
+    )
 
-  target_link_libraries(aria2_c_api PRIVATE
-    -Wl,-Bstatic
-    aria2 gmp z cares ssh2 ssl crypto expat sqlite3
-    -Wl,-Bdynamic
-    c m dl pthread rt
-  )
+    target_link_libraries(aria2_c_api PRIVATE
+      -Wl,-Bstatic
+      aria2 gmp z cares ssh2 ssl crypto expat sqlite3
+      -Wl,-Bdynamic
+      c m dl pthread rt
+    )
   endif()
 
   target_link_options(aria2_c_api PRIVATE
