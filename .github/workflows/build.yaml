@@ -169,7 +169,7 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CPPFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS" \
+            CPPFLAGS="-I$PREFIX/include" \
             LDFLAGS="-L$PREFIX/lib" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
             ARIA2_STATIC=yes
