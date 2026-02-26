@@ -29,7 +29,6 @@ build_windows_mingw() {
   local cmake_preset_debug="$3"
   local cmake_preset_release="$4"
   local apply_patch="${5:-}"
-  local make_verbose="${6:-}"
 
   export LLVM_MINGW="${LLVM_MINGW_DIR:?LLVM_MINGW_DIR not set}"
   export PATH="$LLVM_MINGW/bin:$PATH"
@@ -137,7 +136,7 @@ build_windows_mingw() {
     LDFLAGS="-L$PREFIX/lib" \
     PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
     ARIA2_STATIC=yes
-  make -j$NPROC $make_verbose
+  make -j$NPROC
   make install
 
   cd "$ROOT_DIR"
@@ -781,10 +780,10 @@ build_macos_x64() {
 # Dispatch
 case "${OS}-${ARCH}" in
   windows-x64)
-    build_windows_mingw x86_64-w64-mingw32 windows-x64 windows-x64-debug windows-x64-release "yes" "V=1"
+    build_windows_mingw x86_64-w64-mingw32 windows-x64 windows-x64-debug windows-x64-release "yes"
     ;;
   windows-arm64)
-    build_windows_mingw aarch64-w64-mingw32 windows-arm64 windows-arm64-debug windows-arm64-release "" ""
+    build_windows_mingw aarch64-w64-mingw32 windows-arm64 windows-arm64-debug windows-arm64-release ""
     ;;
   linux-x64)
     build_linux_x64
