@@ -79,6 +79,7 @@ jobs:
           export STRIP=llvm-strip
           export CFLAGS="-O2"
           export CXXFLAGS="-O2"
+          export CPPFLAGS="-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS"
           export LDFLAGS="-L$PREFIX/lib"
 
           cd "$DEPS_DIR"
