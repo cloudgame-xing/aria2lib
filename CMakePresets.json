@@ -123,6 +123,82 @@
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/llvm-mingw-x64.cmake"
       }
+    },
+    {
+      "name": "linux-arm64-release",
+      "displayName": "Linux ARM64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/linux-aarch64.cmake"
+      }
+    },
+    {
+      "name": "linux-arm64-debug",
+      "displayName": "Linux ARM64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/linux-aarch64.cmake"
+      }
+    },
+    {
+      "name": "android-x64-release",
+      "displayName": "Android x64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "x86_64",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
+    },
+    {
+      "name": "android-x64-debug",
+      "displayName": "Android x64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/android-ndk-r25c/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "x86_64",
+        "ANDROID_PLATFORM": "android-24",
+        "ANDROID_STL": "c++_static"
+      }
+    },
+    {
+      "name": "macos-x64-release",
+      "displayName": "macOS x64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_OSX_ARCHITECTURES": "x86_64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "ARIA2_MACOS_X64_CROSS": "ON"
+      }
+    },
+    {
+      "name": "macos-x64-debug",
+      "displayName": "macOS x64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_OSX_ARCHITECTURES": "x86_64",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "ARIA2_MACOS_X64_CROSS": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -165,6 +241,30 @@
     {
       "name": "win-x64-debug",
       "configurePreset": "win-x64-debug"
+    },
+    {
+      "name": "linux-arm64-release",
+      "configurePreset": "linux-arm64-release"
+    },
+    {
+      "name": "linux-arm64-debug",
+      "configurePreset": "linux-arm64-debug"
+    },
+    {
+      "name": "android-x64-release",
+      "configurePreset": "android-x64-release"
+    },
+    {
+      "name": "android-x64-debug",
+      "configurePreset": "android-x64-debug"
+    },
+    {
+      "name": "macos-x64-release",
+      "configurePreset": "macos-x64-release"
+    },
+    {
+      "name": "macos-x64-debug",
+      "configurePreset": "macos-x64-debug"
     }
   ]
 }
