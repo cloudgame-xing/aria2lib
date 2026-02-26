@@ -1,0 +1,51 @@
+diff --git a/src/gai_strerror.h b/src/gai_strerror.h
+index da7b6ca7..86d59a5a 100644
+--- a/src/gai_strerror.h
++++ b/src/gai_strerror.h
+@@ -33,9 +33,9 @@
+ extern "C" {
+ #endif /* __cplusplus */
+ 
+-#ifdef __MINGW32__
+-#  undef SIZE_MAX
+-#endif // __MINGW32__
++// #ifdef __MINGW32__
++// #  undef SIZE_MAX
++// #endif // __MINGW32__
+ 
+ #ifndef EAI_SYSTEM
+ #  define EAI_SYSTEM -11 /* System error returned in `errno'.  */
+diff --git a/src/getaddrinfo.h b/src/getaddrinfo.h
+index d841d4be..7a73a7a3 100644
+--- a/src/getaddrinfo.h
++++ b/src/getaddrinfo.h
+@@ -33,9 +33,9 @@
+ extern "C" {
+ #endif /* __cplusplus */
+ 
+-#ifdef __MINGW32__
+-#  undef SIZE_MAX
+-#endif // __MINGW32__
++// #ifdef __MINGW32__
++// #  undef SIZE_MAX
++// #endif // __MINGW32__
+ 
+ #ifdef HAVE_CONFIG_H
+ #  include "config.h"
+diff --git a/src/gettimeofday.h b/src/gettimeofday.h
+index c5231e9f..a1584638 100644
+--- a/src/gettimeofday.h
++++ b/src/gettimeofday.h
+@@ -36,9 +36,9 @@
+ #ifndef _D_GETTIMEOFDAY_H
+ #define _D_GETTIMEOFDAY_H 1
+ 
+-#ifdef __MINGW32__
+-#  undef SIZE_MAX
+-#endif // __MINGW32__
++// #ifdef __MINGW32__
++// #  undef SIZE_MAX
++// #endif // __MINGW32__
+ 
+ #ifdef HAVE_CONFIG_H
+ #  include "config.h"

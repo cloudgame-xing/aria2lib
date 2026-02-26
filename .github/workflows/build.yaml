@@ -147,6 +147,7 @@ jobs:
 
           echo "-----build aria2-----"
           cd "$ROOT_DIR/aria2"
+          patch -p1 < $ROOT_DIR/fix_mingw32_size_max.diff
           autoreconf -i
           ./configure \
             --prefix=$OUT_DIR/aria2 \
@@ -168,9 +169,7 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CPPFLAGS="-I$PREFIX/include -DSIZE_MAX=__SIZE_MAX__" \
-            CFLAGS="-I$PREFIX/include -DSIZE_MAX=__SIZE_MAX__" \
-            CXXFLAGS="-I$PREFIX/include -DSIZE_MAX=__SIZE_MAX__" \
+            CPPFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS" \
             LDFLAGS="-L$PREFIX/lib" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
             ARIA2_STATIC=yes
