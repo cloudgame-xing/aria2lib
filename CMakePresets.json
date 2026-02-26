@@ -79,6 +79,28 @@
         "CMAKE_OSX_SYSROOT": "iphoneos",
         "CMAKE_MACOSX_BUNDLE": "OFF"
       }
+    },
+    {
+      "name": "win-arm64-release",
+      "displayName": "Windows ARM64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/llvm-mingw-aarch64.cmake"
+      }
+    },
+    {
+      "name": "win-arm64-debug",
+      "displayName": "Windows ARM64 Debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/llvm-mingw-aarch64.cmake"
+      }
     }
   ],
   "buildPresets": [
@@ -105,6 +127,14 @@
     {
       "name": "ios-debug",
       "configurePreset": "ios-debug"
+    },
+    {
+      "name": "win-arm64-release",
+      "configurePreset": "win-arm64-release"
+    },
+    {
+      "name": "win-arm64-debug",
+      "configurePreset": "win-arm64-debug"
     }
   ]
 }
