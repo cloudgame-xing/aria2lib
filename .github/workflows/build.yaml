@@ -142,7 +142,7 @@ jobs:
           curl -L -O $LIBSSH2_URI && tar xf $LIBSSH2_ARCHIVE && rm $LIBSSH2_ARCHIVE
           pushd libssh2-$LIBSSH2_VERSION
           ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --with-crypto=wincng LIBS="-lws2_32"
-          CXXFLAGS="-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -DSIZE_MAX=0xffffffffU" CPPFLAGS="-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -DSIZE_MAX=0xffffffffU" make -j$(nproc) install
+          make -j$(nproc) install
           popd
 
           echo "-----build aria2-----"
@@ -168,7 +168,9 @@ jobs:
             --enable-libaria2 \
             --enable-static \
             --disable-shared \
-            CPPFLAGS="-I$PREFIX/include" \
+            CPPFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS" \
+            CFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS" \
+            CXXFLAGS="-I$PREFIX/include -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS" \
             LDFLAGS="-L$PREFIX/lib" \
             PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
             ARIA2_STATIC=yes
