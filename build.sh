@@ -39,8 +39,8 @@ build_windows_mingw() {
   export AR=llvm-ar
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
-  export CFLAGS="-O2"
-  export CXXFLAGS="-O2"
+  export CFLAGS="-O2 -fno-gnu-tm"
+  export CXXFLAGS="-O2 -fno-gnu-tm"
   export LDFLAGS="-L$PREFIX/lib"
 
   mkdir -p "$DEPS_DIR" "$PREFIX" "$OUT_DIR"
@@ -173,8 +173,8 @@ build_linux_musl() {
   export AR=$HOST-ar
   export RANLIB=$HOST-ranlib
   export STRIP=$HOST-strip
-  export CFLAGS="-O2 -fPIC"
-  export CXXFLAGS="-O2 -fPIC"
+  export CFLAGS="-O2 -fPIC -fno-gnu-tm"
+  export CXXFLAGS="-O2 -fPIC -fno-gnu-tm"
   mkdir -p "$DEPS_DIR" "$PREFIX" "$OUT_DIR"
   cd "$DEPS_DIR"
 

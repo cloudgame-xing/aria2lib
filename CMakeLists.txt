@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(aria2_c_api_demo LANGUAGES CXX)
+project(aria2_c_api_demo LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,6 +31,8 @@ if(MINGW)
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(LINUX)
+  target_sources(aria2_c_api PRIVATE src/itm_stub.c src/itm_stub_tm.cpp)
+  target_compile_options(aria2_c_api PRIVATE -fno-gnu-tm)
   # musl toolchain: static deps from build/deps/out
   target_include_directories(aria2_c_api PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
