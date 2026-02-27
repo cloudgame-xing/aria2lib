@@ -31,38 +31,16 @@ if(MINGW)
   target_link_options(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++)
   target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(LINUX)
-  if(ARIA2_LINUX_ARM64_CROSS OR ARIA2_LINUX_MUSL_X64)
-    # musl toolchain: static deps from build/deps/out
-    target_include_directories(aria2_c_api PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
-      ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
-    )
-    target_link_directories(aria2_c_api PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
-      ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
-    )
-    target_link_libraries(aria2_c_api PRIVATE
-      -Wl,-Bstatic
-      aria2 z cares ssh2 ssl crypto expat sqlite3
-      -Wl,-Bdynamic
-      c m dl pthread rt
-    )
-  else()
-    target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
-    target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
-
-    target_link_options(aria2_c_api PRIVATE
-      -static-libstdc++
-      -static-libgcc
-    )
-
-    target_link_libraries(aria2_c_api PRIVATE
-      -Wl,-Bstatic
-      aria2 gmp z cares ssh2 ssl crypto expat sqlite3
-      -Wl,-Bdynamic
-      c m dl pthread rt
-    )
-  endif()
+  # musl toolchain: static deps from build/deps/out
+  target_include_directories(aria2_c_api PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
+  )
+  target_link_directories(aria2_c_api PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
+  )
+  target_link_libraries(aria2_c_api PRIVATE -static aria2 z cares ssh2 ssl crypto expat sqlite3)
 
   target_link_options(aria2_c_api PRIVATE
     "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
