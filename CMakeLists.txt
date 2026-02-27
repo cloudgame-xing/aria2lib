@@ -36,13 +36,26 @@ elseif(LINUX)
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/include
   )
-  target_link_directories(aria2_c_api PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
+  set(ARIA2_STATIC_LIB "${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib/libaria2.a")
+  set(DEPS_STATIC_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib")
+
+  target_link_libraries(aria2_c_api PRIVATE
+    "-Wl,--start-group"
+    "${ARIA2_STATIC_LIB}"
+    "${DEPS_STATIC_LIB_DIR}/libz.a"
+    "${DEPS_STATIC_LIB_DIR}/libcares.a"
+    "${DEPS_STATIC_LIB_DIR}/libssh2.a"
+    "${DEPS_STATIC_LIB_DIR}/libssl.a"
+    "${DEPS_STATIC_LIB_DIR}/libcrypto.a"
+    "${DEPS_STATIC_LIB_DIR}/libexpat.a"
+    "${DEPS_STATIC_LIB_DIR}/libsqlite3.a"
+    "-Wl,--end-group"
   )
-  target_link_libraries(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++ aria2 z cares ssh2 ssl crypto expat sqlite3)
 
   target_link_options(aria2_c_api PRIVATE
+    -static-libgcc
+    -static-libstdc++
+    -Wl,--no-undefined
     "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
   )
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
