@@ -52,7 +52,8 @@
       "binaryDir": "${sourceDir}/build/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/musl-aarch64.cmake"
       }
     },
     {
@@ -63,6 +64,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/musl-aarch64.cmake",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
@@ -73,7 +75,8 @@
       "binaryDir": "${sourceDir}/build/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/musl-x86_64.cmake"
       }
     },
     {
@@ -84,6 +87,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/musl-x86_64.cmake",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
