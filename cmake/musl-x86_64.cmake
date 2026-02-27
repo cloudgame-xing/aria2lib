@@ -10,6 +10,9 @@ endif()
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)
 
+# Force use of musl sysroot only; otherwise on x86_64 glibc host the linker may pick up /usr/lib.
+set(CMAKE_SYSROOT "${MUSL_TOOLCHAIN}/x86_64-linux-musl")
+
 set(CMAKE_C_COMPILER "${MUSL_TOOLCHAIN}/bin/x86_64-linux-musl-gcc")
 set(CMAKE_CXX_COMPILER "${MUSL_TOOLCHAIN}/bin/x86_64-linux-musl-g++")
 set(CMAKE_AR "${MUSL_TOOLCHAIN}/bin/x86_64-linux-musl-ar" CACHE FILEPATH "Archiver")
