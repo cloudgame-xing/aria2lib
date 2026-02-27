@@ -40,13 +40,11 @@ elseif(LINUX)
     ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib
   )
-  target_link_libraries(aria2_c_api PRIVATE -static aria2 z cares ssh2 ssl crypto expat sqlite3)
+  target_link_libraries(aria2_c_api PRIVATE -static -static-libgcc -static-libstdc++ aria2 z cares ssh2 ssl crypto expat sqlite3)
 
   target_link_options(aria2_c_api PRIVATE
     "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
   )
-
-  # target_link_options(aria2_c_api_main PRIVATE -static -static-libgcc -static-libstdc++)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   if(ARIA2_MACOS_X64_CROSS)
     target_include_directories(aria2_c_api PRIVATE
@@ -68,22 +66,22 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
       "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib/libexpat.a"
     )
   else()
-  execute_process(
-    COMMAND brew --prefix
-    OUTPUT_VARIABLE HOMEBREW_PREFIX
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
+    execute_process(
+      COMMAND brew --prefix
+      OUTPUT_VARIABLE HOMEBREW_PREFIX
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-  target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
-  target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
-  target_link_libraries(aria2_c_api PRIVATE aria2 z xml2 sqlite3 resolv
-    "-framework Security"
-    "-framework CoreFoundation"
-    "${HOMEBREW_PREFIX}/opt/c-ares/lib/libcares.a"
-    "${HOMEBREW_PREFIX}/opt/libssh2/lib/libssh2.a"
-    "${HOMEBREW_PREFIX}/opt/openssl/lib/libssl.a"
-    "${HOMEBREW_PREFIX}/opt/openssl/lib/libcrypto.a"
-  )
+    target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
+    target_link_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib)
+    target_link_libraries(aria2_c_api PRIVATE aria2 z xml2 sqlite3 resolv
+      "-framework Security"
+      "-framework CoreFoundation"
+      "${HOMEBREW_PREFIX}/opt/c-ares/lib/libcares.a"
+      "${HOMEBREW_PREFIX}/opt/libssh2/lib/libssh2.a"
+      "${HOMEBREW_PREFIX}/opt/openssl/lib/libssl.a"
+      "${HOMEBREW_PREFIX}/opt/openssl/lib/libcrypto.a"
+    )
   endif()
 elseif(ANDROID)
   target_include_directories(aria2_c_api PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/include)
