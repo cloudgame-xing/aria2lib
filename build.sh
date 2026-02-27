@@ -173,8 +173,8 @@ build_linux_musl() {
   export AR=$HOST-ar
   export RANLIB=$HOST-ranlib
   export STRIP=$HOST-strip
-  export CFLAGS="-O2"
-  export CXXFLAGS="-O2"
+  export CFLAGS="-O2 -fPIC"
+  export CXXFLAGS="-O2 -fPIC"
   mkdir -p "$DEPS_DIR" "$PREFIX" "$OUT_DIR"
   cd "$DEPS_DIR"
 
