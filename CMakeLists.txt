@@ -38,8 +38,17 @@ elseif(LINUX)
   )
   set(ARIA2_STATIC_LIB "${CMAKE_CURRENT_SOURCE_DIR}/out/aria2/lib/libaria2.a")
   set(DEPS_STATIC_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/deps/out/lib")
+  set(MUSL_SYS_LIB_DIR "${CMAKE_SYSROOT}/lib")
+
+  set(MUSL_SYS_STATIC_LIBS)
+  foreach(SYS_LIB libc.a libm.a libpthread.a libdl.a librt.a)
+    if(EXISTS "${MUSL_SYS_LIB_DIR}/${SYS_LIB}")
+      list(APPEND MUSL_SYS_STATIC_LIBS "${MUSL_SYS_LIB_DIR}/${SYS_LIB}")
+    endif()
+  endforeach()
 
   target_link_libraries(aria2_c_api PRIVATE
+    "-Wl,-Bstatic"
     "-Wl,--start-group"
     "${ARIA2_STATIC_LIB}"
     "${DEPS_STATIC_LIB_DIR}/libz.a"
@@ -49,12 +58,15 @@ elseif(LINUX)
     "${DEPS_STATIC_LIB_DIR}/libcrypto.a"
     "${DEPS_STATIC_LIB_DIR}/libexpat.a"
     "${DEPS_STATIC_LIB_DIR}/libsqlite3.a"
+    ${MUSL_SYS_STATIC_LIBS}
     "-Wl,--end-group"
+    "-Wl,-Bdynamic"
   )
 
   target_link_options(aria2_c_api PRIVATE
     -static-libgcc
     -static-libstdc++
+    -Wl,--exclude-libs,ALL
     -Wl,--no-undefined
     "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script"
   )
