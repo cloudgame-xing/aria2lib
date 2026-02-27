@@ -52,8 +52,7 @@
       "binaryDir": "${sourceDir}/build/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/linux-aarch64.cmake"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Release"
       }
     },
     {
@@ -64,7 +63,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/aria2lib/Debug",
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/linux-aarch64.cmake"
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
     {

@@ -48,7 +48,7 @@ jobs:
           - runner: ubuntu-22.04
             os: linux
             arch: x64
-          - runner: ubuntu-22.04
+          - runner: ubuntu-22.04-arm
             os: linux
             arch: arm64
           - runner: macos-14
@@ -115,30 +115,25 @@ jobs:
             libexpat1-dev \
             libcppunit-dev
 
-      - name: Install build dependencies (Ubuntu, linux arm64 cross)
+      - name: Install build dependencies (Ubuntu, linux arm64 native)
         if: runner.os == 'Linux' && matrix.os == 'linux' && matrix.arch == 'arm64'
         run: |
           sudo apt update
-          sudo apt install -y --no-install-recommends \
-            gcc-aarch64-linux-gnu \
-            g++-aarch64-linux-gnu \
-            unzip \
-            xz-utils \
-            bzip2 \
-            make \
-            ninja-build \
-            binutils \
+          sudo apt install -y \
+            g++-12 \
             autoconf \
             automake \
             autotools-dev \
             autopoint \
             libtool \
             pkg-config \
-            dpkg-dev \
-            curl \
-            ca-certificates \
-            python3-docutils \
-            cmake
+            libssl-dev \
+            libc-ares-dev \
+            zlib1g-dev \
+            libsqlite3-dev \
+            libssh2-1-dev \
+            libexpat1-dev \
+            libcppunit-dev
 
       - name: Install build dependencies (Ubuntu, android cross)
         if: runner.os == 'Linux' && matrix.os == 'android'
