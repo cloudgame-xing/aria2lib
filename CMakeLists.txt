@@ -135,6 +135,22 @@ install(TARGETS aria2_c_api
   ARCHIVE DESTINATION lib
 )
 
+# Windows (MinGW/LLD): PDB 生成在 build 目录，默认 install(TARGETS) 不会安装，此处将 *.pdb 拷贝到安装目录
+if(MINGW)
+  install(CODE "
+    set(DLL_DIR \"$<TARGET_FILE_DIR:aria2_c_api>\")
+    set(EXE_DIR \"$<TARGET_FILE_DIR:aria2_c_api_main>\")
+    file(GLOB PDB_DLL \"\${DLL_DIR}/*.pdb\")
+    foreach(F \${PDB_DLL})
+      file(INSTALL \${F} DESTINATION \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/lib)
+    endforeach()
+    file(GLOB PDB_EXE \"\${EXE_DIR}/*.pdb\")
+    foreach(F \${PDB_EXE})
+      file(INSTALL \${F} DESTINATION \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/bin)
+    endforeach()
+  ")
+endif()
+
 install(FILES src/aria2_c_api.h DESTINATION include)
 
 install(TARGETS aria2_c_api_main
