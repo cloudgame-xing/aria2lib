@@ -94,7 +94,6 @@ jobs:
             ca-certificates \
             python3-docutils \
             cmake
-          echo "DEBUG_SYMBOL=PDB" >> "$GITHUB_ENV"
 
       - name: Install build dependencies (Ubuntu, linux native)
         if: runner.os == 'Linux' && matrix.os == 'linux' && matrix.arch == 'x64'
@@ -205,7 +204,7 @@ jobs:
       - name: Build aria2 and aria2_c_api
         run: |
           chmod +x build.sh
-          VERSION_NAME="${{ needs.setup.outputs.version_name }}" ./build.sh ${{ matrix.os }} ${{ matrix.arch }}
+          VERSION_NAME="${{ needs.setup.outputs.version_name }}" DEBUG_SYMBOL=PDB ./build.sh ${{ matrix.os }} ${{ matrix.arch }}
 
       - name: Upload to Artifacts (for non-release builds)
         if: github.event_name != 'release'
