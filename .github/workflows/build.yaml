@@ -94,6 +94,7 @@ jobs:
             ca-certificates \
             python3-docutils \
             cmake
+          echo "DEBUG_SYMBOL=PDB" >> "$GITHUB_ENV"
 
       - name: Install build dependencies (Ubuntu, linux native)
         if: runner.os == 'Linux' && matrix.os == 'linux' && matrix.arch == 'x64'

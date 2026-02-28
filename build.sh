@@ -45,6 +45,7 @@ build_windows_mingw() {
   local use_pdb=""
   if [[ "$suffix" == "windows-x64" && "${DEBUG_SYMBOL:-}" == "PDB" ]]; then
     use_pdb=1
+    echo "use_pdb=1"
     export CFLAGS="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld"
     export CXXFLAGS="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld"
     export LDFLAGS="-L$PREFIX/lib -Wl,/DEBUG"
