@@ -38,9 +38,20 @@ build_windows_mingw() {
   export AR=llvm-ar
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
-  export CFLAGS="-O2"
-  export CXXFLAGS="-O2"
   export LDFLAGS="-L$PREFIX/lib"
+
+  # Windows x64: 当 DEBUG_SYMBOL=PDB 时使用 PDB 调试格式并禁用优化，便于本地调试
+  # llvm-mingw 默认已是 ld.lld；此处显式 -fuse-ld=lld 以便在非 llvm-mingw 环境（如 MSYS2）下也能用 LLD 生成 PDB
+  local use_pdb=""
+  if [[ "$suffix" == "windows-x64" && "${DEBUG_SYMBOL:-}" == "PDB" ]]; then
+    use_pdb=1
+    export CFLAGS="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld"
+    export CXXFLAGS="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld"
+    export LDFLAGS="-L$PREFIX/lib -Wl,/DEBUG"
+  else
+    export CFLAGS="-O2"
+    export CXXFLAGS="-O2"
+  fi
 
   mkdir -p "$DEPS_DIR" "$PREFIX" "$OUT_DIR"
   cd "$DEPS_DIR"
@@ -133,7 +144,7 @@ build_windows_mingw() {
     --enable-static \
     --disable-shared \
     CPPFLAGS="-I$PREFIX/include" \
-    LDFLAGS="-L$PREFIX/lib" \
+    LDFLAGS="$LDFLAGS" \
     PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
     ARIA2_STATIC=yes
   make -j$NPROC
@@ -145,7 +156,15 @@ build_windows_mingw() {
   echo "-----build aria2_c_api-----"
   export LLVM_MINGW="$LLVM_MINGW_DIR"
   export OUT_DIR="$ROOT_DIR/out"
-  cmake --preset "$cmake_preset_debug"
+  if [[ -n "$use_pdb" ]]; then
+    cmake --preset "$cmake_preset_debug" \
+      -DCMAKE_C_FLAGS_DEBUG="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld" \
+      -DCMAKE_CXX_FLAGS_DEBUG="-O0 -g -gcodeview -fno-omit-frame-pointer -fno-inline -fno-optimize-sibling-calls -fuse-ld=lld" \
+      -DCMAKE_EXE_LINKER_FLAGS_DEBUG="-Wl,/DEBUG" \
+      -DCMAKE_SHARED_LINKER_FLAGS_DEBUG="-Wl,/DEBUG"
+  else
+    cmake --preset "$cmake_preset_debug"
+  fi
   cmake --build --preset "$cmake_preset_debug"
   cmake --install build/Debug
   cmake --preset "$cmake_preset_release"
