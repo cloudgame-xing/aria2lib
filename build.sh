@@ -180,115 +180,17 @@ build_linux_x64() {
 }
 
 build_linux_arm64() {
-  export HOST=aarch64-linux-gnu
-  export CC=$HOST-gcc
-  export CXX=$HOST-g++
-  export AR=$HOST-ar
-  export RANLIB=$HOST-ranlib
-  export STRIP=$HOST-strip
-  mkdir -p "$DEPS_DIR" "$PREFIX" "$OUT_DIR"
-  cd "$DEPS_DIR"
-
-  export OPENSSL_VERSION=1.1.1w
-  export OPENSSL_ARCHIVE=openssl-$OPENSSL_VERSION.tar.gz
-  export OPENSSL_URI=https://www.openssl.org/source/$OPENSSL_ARCHIVE
-  export ZLIB_VERSION=1.3.1
-  export ZLIB_ARCHIVE=zlib-$ZLIB_VERSION.tar.gz
-  export ZLIB_URI=https://github.com/madler/zlib/releases/download/v1.3.1/$ZLIB_ARCHIVE
-  export LIBEXPAT_VERSION=2.5.0
-  export LIBEXPAT_ARCHIVE=expat-$LIBEXPAT_VERSION.tar.bz2
-  export LIBEXPAT_URI=https://github.com/libexpat/libexpat/releases/download/R_2_5_0/$LIBEXPAT_ARCHIVE
-  export CARES_VERSION=1.21.0
-  export CARES_ARCHIVE=c-ares-$CARES_VERSION.tar.gz
-  export CARES_URI=https://github.com/c-ares/c-ares/releases/download/cares-1_21_0/$CARES_ARCHIVE
-  export LIBSSH2_VERSION=1.11.0
-  export LIBSSH2_ARCHIVE=libssh2-$LIBSSH2_VERSION.tar.bz2
-  export LIBSSH2_URI=https://libssh2.org/download/$LIBSSH2_ARCHIVE
-  export SQLITE_VERSION=3430100
-  export SQLITE_ARCHIVE=sqlite-autoconf-$SQLITE_VERSION.tar.gz
-  export SQLITE_URI=https://www.sqlite.org/2023/$SQLITE_ARCHIVE
-  export GMP_VERSION=6.3.0
-  export GMP_ARCHIVE=gmp-$GMP_VERSION.tar.xz
-  export GMP_URI=https://ftpmirror.gnu.org/gmp/$GMP_ARCHIVE
-
-  echo "-----build openssl-----"
-  curl -L -O $OPENSSL_URI && tar xf $OPENSSL_ARCHIVE && rm $OPENSSL_ARCHIVE
-  pushd openssl-$OPENSSL_VERSION
-  ./Configure linux-aarch64 no-shared --prefix=$PREFIX
-  make -j$NPROC
-  make install_sw
-  popd
-
-  echo "-----build zlib-----"
-  curl -L -O $ZLIB_URI && tar xf $ZLIB_ARCHIVE && rm $ZLIB_ARCHIVE
-  pushd zlib-$ZLIB_VERSION
-  CC=$CC AR=$AR RANLIB=$RANLIB ./configure --prefix=$PREFIX --libdir=$PREFIX/lib --static
-  make -j$NPROC install
-  popd
-
-  echo "-----build libexpat-----"
-  curl -L -O $LIBEXPAT_URI && tar xf $LIBEXPAT_ARCHIVE && rm $LIBEXPAT_ARCHIVE
-  pushd expat-$LIBEXPAT_VERSION
-  ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared
-  make -j$NPROC install
-  popd
-
-  echo "-----build c-ares-----"
-  curl -L -O $CARES_URI && tar xf $CARES_ARCHIVE && rm $CARES_ARCHIVE
-  pushd c-ares-$CARES_VERSION
-  ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared
-  make -j$NPROC install
-  popd
-
-  echo "-----build libssh2-----"
-  curl -L -O $LIBSSH2_URI && tar xf $LIBSSH2_ARCHIVE && rm $LIBSSH2_ARCHIVE
-  pushd libssh2-$LIBSSH2_VERSION
-  ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --with-crypto=openssl
-  make -j$NPROC install
-  popd
-
-  echo "-----build gmp-----"
-  curl -L -O $GMP_URI && tar xf $GMP_ARCHIVE && rm $GMP_ARCHIVE
-  pushd gmp-$GMP_VERSION
-  ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --disable-cxx --enable-static
-  make -j$NPROC install
-  popd
-
-  echo "-----build sqlite3-----"
-  curl -L -O $SQLITE_URI && tar xf $SQLITE_ARCHIVE && rm $SQLITE_ARCHIVE
-  pushd sqlite-autoconf-$SQLITE_VERSION
-  ./configure --host=$HOST --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --prefix=$PREFIX --disable-shared --enable-static
-  make -j$NPROC install
-  popd
-
-  echo "-----build aria2-----"
-  cd "$ROOT_DIR/aria2"
+  mkdir -p "$OUT_DIR"
+  export OUT_DIR
+  export CC=gcc-12
+  export CXX=g++-12
+  pushd aria2
   autoreconf -i
-  ./configure \
-    --prefix=$OUT_DIR/aria2 \
-    --host=$HOST \
-    --build=$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) \
-    --disable-nls \
-    --without-gnutls \
-    --with-openssl \
-    --with-sqlite3 \
-    --without-libxml2 \
-    --with-libexpat \
-    --with-libcares \
-    --with-libz \
-    --with-libgmp \
-    --with-libssh2 \
-    --enable-libaria2 \
-    --enable-static \
-    --disable-shared \
-    CPPFLAGS="-I$PREFIX/include" \
-    LDFLAGS="-L$PREFIX/lib" \
-    PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
-    ARIA2_STATIC=yes
+  ./configure --prefix="$OUT_DIR/aria2" --without-gnutls --with-openssl --without-libxml2 --with-libexpat --enable-libaria2 ARIA2_STATIC=yes
   make -j$NPROC
   make install
-
-  cd "$ROOT_DIR"
+  popd
+  tree "$OUT_DIR" || true
   tar -czvf "aria2-linux-arm64-${VERSION_NAME}.tar.gz" -C "$OUT_DIR" aria2
 
   export OUT_DIR="$ROOT_DIR/out"
